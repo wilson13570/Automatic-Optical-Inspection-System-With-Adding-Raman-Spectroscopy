@@ -7,7 +7,7 @@ namespace Raman1._0
     static class SpectrometerInterface
     {
         #region SDK DLL Function Imports (P/Invoke)
-        private const string SDK_DLL = "UserApplication.dll";
+        private const string SDK_DLL = @"SDK_DLL\UserApplication.dll";
 
         [DllImport(SDK_DLL, CallingConvention = CallingConvention.StdCall)]
         public static extern uint UAI_SpectrometerGetDeviceList(out uint number, [Out] uint[] list);

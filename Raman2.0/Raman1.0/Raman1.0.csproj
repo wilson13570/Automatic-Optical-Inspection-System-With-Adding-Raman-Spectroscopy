@@ -94,15 +94,15 @@
     <EmbeddedResource Include="SpectrometerPanel.resx">
       <DependentUpon>SpectrometerPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="SDK_DLL\DeviceLibrary.dll">
+    <Content Include="SDK_DLL\DeviceLibrary.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="SDK_DLL\SiUSBXp.dll">
+    </Content>
+    <Content Include="SDK_DLL\SiUSBXp.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="SDK_DLL\UserApplication.dll">
+    </Content>
+    <Content Include="SDK_DLL\UserApplication.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

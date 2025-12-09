@@ -1,53 +1,53 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\",
+  "WorkspaceRootPath": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|c:\\users\\wilson\\desktop\\raman 3.0\\new-raman\\raman2.0\\raman1.0\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\spectrometerinterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\raman1.0\\spectrometerinterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\spectrometerinterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|c:\\users\\wilson\\desktop\\new raman\\automatic-optical-inspection-system-with-adding-raman-spectroscopy\\raman2.0\\raman1.0\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\raman1.0\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\spectrometerpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\raman1.0\\spectrometerpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\spectrometerpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\raman1.0\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\spectrometerpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\raman1.0\\spectrometerpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\spectrometerpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\raman1.0\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\spectrometerpanel.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\raman1.0\\spectrometerpanel.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\spectrometerpanel.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\scripts\\blur_detection.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\raman1.0\\scripts\\blur_detection.py||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\scripts\\blur_detection.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\scripts\\tcp_server.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\raman1.0\\scripts\\tcp_server.py||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\scripts\\tcp_server.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\scripts\\cv_cl.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\raman1.0\\scripts\\cv_cl.py||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\scripts\\cv_cl.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\analyze\\analyze.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\raman1.0\\analyze\\analyze.py||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\analyze\\analyze.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
@@ -58,15 +58,15 @@
       "DocumentGroups": [
         {
           "DockedHeight": 338,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "MainForm.cs",
-              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\MainForm.cs",
+              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\MainForm.cs",
               "RelativeDocumentMoniker": "Raman1.0\\MainForm.cs",
-              "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\MainForm.cs",
+              "ToolTip": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\MainForm.cs",
               "RelativeToolTip": "Raman1.0\\MainForm.cs",
               "ViewState": "AgIAAE4AAAAAAAAAAAAWwGwAAABOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -78,9 +78,9 @@
               "$type": "Document",
               "DocumentIndex": 4,
               "Title": "MainForm.Designer.cs",
-              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\MainForm.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\MainForm.Designer.cs",
               "RelativeDocumentMoniker": "Raman1.0\\MainForm.Designer.cs",
-              "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\MainForm.Designer.cs",
+              "ToolTip": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\MainForm.Designer.cs",
               "RelativeToolTip": "Raman1.0\\MainForm.Designer.cs",
               "ViewState": "AgIAANoCAAAAAAAAAAAAAMACAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -89,13 +89,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "SpectrometerInterface.cs",
-              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\SpectrometerInterface.cs",
+              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\SpectrometerInterface.cs",
               "RelativeDocumentMoniker": "Raman1.0\\SpectrometerInterface.cs",
-              "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\SpectrometerInterface.cs",
+              "ToolTip": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\SpectrometerInterface.cs",
               "RelativeToolTip": "Raman1.0\\SpectrometerInterface.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAmwDAAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-09T10:17:31.022Z",
               "EditorCaption": ""
@@ -104,47 +104,44 @@
               "$type": "Document",
               "DocumentIndex": 7,
               "Title": "SpectrometerPanel.Designer.cs",
-              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\SpectrometerPanel.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\SpectrometerPanel.Designer.cs",
               "RelativeDocumentMoniker": "Raman1.0\\SpectrometerPanel.Designer.cs",
-              "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\SpectrometerPanel.Designer.cs",
+              "ToolTip": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\SpectrometerPanel.Designer.cs",
               "RelativeToolTip": "Raman1.0\\SpectrometerPanel.Designer.cs",
               "ViewState": "AgIAAG4AAAAAAAAAAAAcwKUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-09T10:10:26.583Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-09T10:10:26.583Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
               "Title": "SpectrometerPanel.cs",
-              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\SpectrometerPanel.cs",
+              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\SpectrometerPanel.cs",
               "RelativeDocumentMoniker": "Raman1.0\\SpectrometerPanel.cs",
-              "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\SpectrometerPanel.cs",
+              "ToolTip": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\SpectrometerPanel.cs",
               "RelativeToolTip": "Raman1.0\\SpectrometerPanel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACkAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-09T10:04:40.778Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-09T10:04:40.778Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "SpectrometerPanel.cs [\u8A2D\u8A08]",
-              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\SpectrometerPanel.cs",
+              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\SpectrometerPanel.cs",
               "RelativeDocumentMoniker": "Raman1.0\\SpectrometerPanel.cs",
               "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\SpectrometerPanel.cs [\u8A2D\u8A08]",
-              "RelativeToolTip": "Raman1.0\\SpectrometerPanel.cs [\u8A2D\u8A08]",
+              "RelativeToolTip": "..\\..\\..\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\SpectrometerPanel.cs [\u8A2D\u8A08]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-09T10:03:24.014Z",
-              "EditorCaption": " [\u8A2D\u8A08]"
+              "WhenOpened": "2025-12-09T10:03:24.014Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "MainForm.cs [\u8A2D\u8A08]",
-              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\MainForm.cs",
+              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\MainForm.cs",
               "RelativeDocumentMoniker": "Raman1.0\\MainForm.cs",
-              "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\MainForm.cs [\u8A2D\u8A08]",
+              "ToolTip": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\MainForm.cs [\u8A2D\u8A08]",
               "RelativeToolTip": "Raman1.0\\MainForm.cs [\u8A2D\u8A08]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-08T07:19:18.021Z",
@@ -154,10 +151,10 @@
               "$type": "Document",
               "DocumentIndex": 6,
               "Title": "Form1.cs [\u8A2D\u8A08]",
-              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\Form1.cs",
+              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\Form1.cs",
               "RelativeDocumentMoniker": "Raman1.0\\Form1.cs",
               "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\Form1.cs [\u8A2D\u8A08]",
-              "RelativeToolTip": "Raman1.0\\Form1.cs [\u8A2D\u8A08]",
+              "RelativeToolTip": "..\\..\\..\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\Form1.cs [\u8A2D\u8A08]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-08T07:19:14.954Z"
             },
@@ -165,59 +162,49 @@
               "$type": "Document",
               "DocumentIndex": 8,
               "Title": "Blur_Detection.py",
-              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\Scripts\\Blur_Detection.py",
+              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\Scripts\\Blur_Detection.py",
               "RelativeDocumentMoniker": "Raman1.0\\Scripts\\Blur_Detection.py",
-              "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\Scripts\\Blur_Detection.py",
+              "ToolTip": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\Scripts\\Blur_Detection.py",
               "RelativeToolTip": "Raman1.0\\Scripts\\Blur_Detection.py",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAdAAAAAAAAAA==",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMuSURBVDhPrVTPTxNREP627e7SQm0F2mKLUEVICP5IMBqUhB6NJ4/GGGPwoIf\u002BCR7VxBBPhnAxAeVC4kEuJB6Qi0Y8oCGKpoKQUpEWAhX6c7vb3X1Ol5UauzEc/JLJm31v3pdv5u0M/isYY5zpGohEIs8GBgZu8Dxv7tQik8mwbDb7YGpq6lEqlcqa2/twmOs\u002BBgcHEQgEzK9azMzMsHg8fsdut7Pp6enHKysrafPIQA1hBRRkelUQAcLhMEi9jTLxdnZ23pZl2elwOIYWFxe3zTBrwmAwaHpVcFy1OoIg8P39/c1Efo3KJquq\u002BpBEFCpnNiPiL9CFGvtd14rSyclJDA8P22dnZ1tcLlevKIp\u002B45BgqXBpacn0qqDUQGniXN9F9J6/AIeNg1TIyaOjo9/NEAOWhN3d3aZXRV5W8Sq2jY2sBElSwFNuR9x2x5HWtkabrZrogRXKDUEsb\u002BSxmSlg7tsG1LICX4PAX\u002Blpbff7/Q1mmHUNK6/5t2WKKt4uphBbS0NXy2QasvkiV1RtTrfb7TKvWhNWoGkaNHD4ulXGxNwmPibSOH3Ui95wI5rqeahESq8Ln7dwavLpjXe69HlB1/U2y5RXV1eNdb3E48VCDuvpHF1WoJWJhEyjdHWNVNKvJHBbgDQPlOZ74Ls7ZKmwq6vLsCKrw\u002BZu3lCjl1UquA6P0wGPi4eX7EzYhdNB6j5NoiL/AJS1S5YKY7GYsa6tS5BlUkOptTU6EI1IcNp3aQboNAh0eIUdhJybgFrcI9V2Pf9U2B4KQKCIisLbEQFnWz6gx7eMk/4VnGyOobU\u002BDk79SQF5IqNG4YM7loSKohjWfljE8WYn3KIdvkM6OKYBukIEMq2kkj7BiIJRF9Wd0iCEnlimnEwmjVUkuxU5jgzdD3jooUpEppWosT1kTlJE/S127UA89gV1J76Nj48PWRJ2dHSY3h4qg0HUkwz5AmcQajRc6vtIGRHam9aev1y/9/r1xNuRkZFiDeHY2Nj\u002BIPgTN69fThwVQ2Eon4iQHiD3HqzhPNOcvek3b\u002B7HK2Rm6MFAY\u002BoQ08uPWCmRYvl5ncnJBO29JLsajUbDe1HAL6CnYE1YMsFsAAAAAElFTkSuQmCC",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKfSURBVDhPZVNLTBNRFD0znSn90MZpBaEKKYjEX4BEk2qhhgXRdOXGBStMdOPGlew1Lty5cePKhJgQjSQmmGhijBo0MRKIRgJFAastoSBDWyjT6XQ\u002Bb3wDk4ZmTnKT9\u002B4777z7eZeBjXg8HkgkEoLH42FtVw2KomBnZ0deXFwsTE1N6bYbIOQzZy/B8/xwZ2fnw3A43Gi7apAkycxmszO6rt8VRfFjKpVS9w5YNlETsBCLxRAMBu3dPqgwqtUqs7y83NvV1XWPRtNYLpdfZzIZxTp37bEootHouWQyeUUQBLd16aCpqgrTNLm\u002Bvr4jfr\u002B/u1KprFJemooQR74cxznMRe3X0hJeTEzw6XT6hNfr7aGpeCy\u002BQ6BQKNSZWNiGzPhw8sIQ\u002BpPXMJi8qrZFo5JNdwqwLFtnu/Dj3cImnn5awaM383g5u\u002BYRIsebI5HIXvoOAauIBy2br\u002BDLz3UsrRWQXi8itZrnNdZjtZu3\u002BA4BCzox8WfbwLNZET8yeUQP\u002B9AScIMYGkyj6h7oMW5Njt\u002BeM7WNobo2WiiVSigqBJNzRXz7W6QdqAL0ItE1MKYBwccg6FoBdnMthD/2wBEBIQSyokHcLkPVVESCJobPVzFyUcaNfgXXYyLaG9cBdQvQNnsdEYRCISisggZ\u002BCwZ99eYAh1jrPM2VUPUqWEOCi9AmGGVagIDiiIB\u002BV/hpec60\u002BtEmeNHRRNDAyODNMnhocJmUxPh0NHRLhA0/dkQgyzKsCbt8tgWJ00fRFPhOh4G\u002BRgsLrhVwew2NOzWjch2vFuZ\u002Bj9UJTE9Pgw6TvdtHJC4UPCYTgrpBwzZh\u002Bno0SY98HRt//2R0dHSrJqBp2nP6Td/mcrm6tIYGR5qZQ3fuQxcvgfWXGHf7bOWf9IFy6TAB/wHvDCS96T4l0wAAAABJRU5ErkJggg==",
               "WhenOpened": "2025-07-11T01:46:16.881Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 11,
               "Title": "analyze.py",
-              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\analyze\\analyze.py",
+              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\analyze\\analyze.py",
               "RelativeDocumentMoniker": "Raman1.0\\analyze\\analyze.py",
-              "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\analyze\\analyze.py",
+              "ToolTip": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\analyze\\analyze.py",
               "RelativeToolTip": "Raman1.0\\analyze\\analyze.py",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAaAAAAAAAAAA==",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMuSURBVDhPrVTPTxNREP627e7SQm0F2mKLUEVICP5IMBqUhB6NJ4/GGGPwoIf\u002BCR7VxBBPhnAxAeVC4kEuJB6Qi0Y8oCGKpoKQUpEWAhX6c7vb3X1Ol5UauzEc/JLJm31v3pdv5u0M/isYY5zpGohEIs8GBgZu8Dxv7tQik8mwbDb7YGpq6lEqlcqa2/twmOs\u002BBgcHEQgEzK9azMzMsHg8fsdut7Pp6enHKysrafPIQA1hBRRkelUQAcLhMEi9jTLxdnZ23pZl2elwOIYWFxe3zTBrwmAwaHpVcFy1OoIg8P39/c1Efo3KJquq\u002BpBEFCpnNiPiL9CFGvtd14rSyclJDA8P22dnZ1tcLlevKIp\u002B45BgqXBpacn0qqDUQGniXN9F9J6/AIeNg1TIyaOjo9/NEAOWhN3d3aZXRV5W8Sq2jY2sBElSwFNuR9x2x5HWtkabrZrogRXKDUEsb\u002BSxmSlg7tsG1LICX4PAX\u002Blpbff7/Q1mmHUNK6/5t2WKKt4uphBbS0NXy2QasvkiV1RtTrfb7TKvWhNWoGkaNHD4ulXGxNwmPibSOH3Ui95wI5rqeahESq8Ln7dwavLpjXe69HlB1/U2y5RXV1eNdb3E48VCDuvpHF1WoJWJhEyjdHWNVNKvJHBbgDQPlOZ74Ls7ZKmwq6vLsCKrw\u002BZu3lCjl1UquA6P0wGPi4eX7EzYhdNB6j5NoiL/AJS1S5YKY7GYsa6tS5BlUkOptTU6EI1IcNp3aQboNAh0eIUdhJybgFrcI9V2Pf9U2B4KQKCIisLbEQFnWz6gx7eMk/4VnGyOobU\u002BDk79SQF5IqNG4YM7loSKohjWfljE8WYn3KIdvkM6OKYBukIEMq2kkj7BiIJRF9Wd0iCEnlimnEwmjVUkuxU5jgzdD3jooUpEppWosT1kTlJE/S127UA89gV1J76Nj48PWRJ2dHSY3h4qg0HUkwz5AmcQajRc6vtIGRHam9aev1y/9/r1xNuRkZFiDeHY2Nj\u002BIPgTN69fThwVQ2Eon4iQHiD3HqzhPNOcvek3b\u002B7HK2Rm6MFAY\u002BoQ08uPWCmRYvl5ncnJBO29JLsajUbDe1HAL6CnYE1YMsFsAAAAAElFTkSuQmCC",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKfSURBVDhPZVNLTBNRFD0znSn90MZpBaEKKYjEX4BEk2qhhgXRdOXGBStMdOPGlew1Lty5cePKhJgQjSQmmGhijBo0MRKIRgJFAastoSBDWyjT6XQ\u002Bb3wDk4ZmTnKT9\u002B4777z7eZeBjXg8HkgkEoLH42FtVw2KomBnZ0deXFwsTE1N6bYbIOQzZy/B8/xwZ2fnw3A43Gi7apAkycxmszO6rt8VRfFjKpVS9w5YNlETsBCLxRAMBu3dPqgwqtUqs7y83NvV1XWPRtNYLpdfZzIZxTp37bEootHouWQyeUUQBLd16aCpqgrTNLm\u002Bvr4jfr\u002B/u1KprFJemooQR74cxznMRe3X0hJeTEzw6XT6hNfr7aGpeCy\u002BQ6BQKNSZWNiGzPhw8sIQ\u002BpPXMJi8qrZFo5JNdwqwLFtnu/Dj3cImnn5awaM383g5u\u002BYRIsebI5HIXvoOAauIBy2br\u002BDLz3UsrRWQXi8itZrnNdZjtZu3\u002BA4BCzox8WfbwLNZET8yeUQP\u002B9AScIMYGkyj6h7oMW5Njt\u002BeM7WNobo2WiiVSigqBJNzRXz7W6QdqAL0ItE1MKYBwccg6FoBdnMthD/2wBEBIQSyokHcLkPVVESCJobPVzFyUcaNfgXXYyLaG9cBdQvQNnsdEYRCISisggZ\u002BCwZ99eYAh1jrPM2VUPUqWEOCi9AmGGVagIDiiIB\u002BV/hpec60\u002BtEmeNHRRNDAyODNMnhocJmUxPh0NHRLhA0/dkQgyzKsCbt8tgWJ00fRFPhOh4G\u002BRgsLrhVwew2NOzWjch2vFuZ\u002Bj9UJTE9Pgw6TvdtHJC4UPCYTgrpBwzZh\u002Bno0SY98HRt//2R0dHSrJqBp2nP6Td/mcrm6tIYGR5qZQ3fuQxcvgfWXGHf7bOWf9IFy6TAB/wHvDCS96T4l0wAAAABJRU5ErkJggg==",
               "WhenOpened": "2025-07-11T00:51:10.242Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 10,
               "Title": "cv_cl.py",
-              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\Scripts\\cv_cl.py",
+              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\Scripts\\cv_cl.py",
               "RelativeDocumentMoniker": "Raman1.0\\Scripts\\cv_cl.py",
-              "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\Scripts\\cv_cl.py",
+              "ToolTip": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\Scripts\\cv_cl.py",
               "RelativeToolTip": "Raman1.0\\Scripts\\cv_cl.py",
               "ViewState": "AgIAAJoAAAAAAAAAAAAowKsAAAAZAAAAAAAAAA==",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMuSURBVDhPrVTPTxNREP627e7SQm0F2mKLUEVICP5IMBqUhB6NJ4/GGGPwoIf\u002BCR7VxBBPhnAxAeVC4kEuJB6Qi0Y8oCGKpoKQUpEWAhX6c7vb3X1Ol5UauzEc/JLJm31v3pdv5u0M/isYY5zpGohEIs8GBgZu8Dxv7tQik8mwbDb7YGpq6lEqlcqa2/twmOs\u002BBgcHEQgEzK9azMzMsHg8fsdut7Pp6enHKysrafPIQA1hBRRkelUQAcLhMEi9jTLxdnZ23pZl2elwOIYWFxe3zTBrwmAwaHpVcFy1OoIg8P39/c1Efo3KJquq\u002BpBEFCpnNiPiL9CFGvtd14rSyclJDA8P22dnZ1tcLlevKIp\u002B45BgqXBpacn0qqDUQGniXN9F9J6/AIeNg1TIyaOjo9/NEAOWhN3d3aZXRV5W8Sq2jY2sBElSwFNuR9x2x5HWtkabrZrogRXKDUEsb\u002BSxmSlg7tsG1LICX4PAX\u002Blpbff7/Q1mmHUNK6/5t2WKKt4uphBbS0NXy2QasvkiV1RtTrfb7TKvWhNWoGkaNHD4ulXGxNwmPibSOH3Ui95wI5rqeahESq8Ln7dwavLpjXe69HlB1/U2y5RXV1eNdb3E48VCDuvpHF1WoJWJhEyjdHWNVNKvJHBbgDQPlOZ74Ls7ZKmwq6vLsCKrw\u002BZu3lCjl1UquA6P0wGPi4eX7EzYhdNB6j5NoiL/AJS1S5YKY7GYsa6tS5BlUkOptTU6EI1IcNp3aQboNAh0eIUdhJybgFrcI9V2Pf9U2B4KQKCIisLbEQFnWz6gx7eMk/4VnGyOobU\u002BDk79SQF5IqNG4YM7loSKohjWfljE8WYn3KIdvkM6OKYBukIEMq2kkj7BiIJRF9Wd0iCEnlimnEwmjVUkuxU5jgzdD3jooUpEppWosT1kTlJE/S127UA89gV1J76Nj48PWRJ2dHSY3h4qg0HUkwz5AmcQajRc6vtIGRHam9aev1y/9/r1xNuRkZFiDeHY2Nj\u002BIPgTN69fThwVQ2Eon4iQHiD3HqzhPNOcvek3b\u002B7HK2Rm6MFAY\u002BoQ08uPWCmRYvl5ncnJBO29JLsajUbDe1HAL6CnYE1YMsFsAAAAAElFTkSuQmCC",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKfSURBVDhPZVNLTBNRFD0znSn90MZpBaEKKYjEX4BEk2qhhgXRdOXGBStMdOPGlew1Lty5cePKhJgQjSQmmGhijBo0MRKIRgJFAastoSBDWyjT6XQ\u002Bb3wDk4ZmTnKT9\u002B4777z7eZeBjXg8HkgkEoLH42FtVw2KomBnZ0deXFwsTE1N6bYbIOQzZy/B8/xwZ2fnw3A43Gi7apAkycxmszO6rt8VRfFjKpVS9w5YNlETsBCLxRAMBu3dPqgwqtUqs7y83NvV1XWPRtNYLpdfZzIZxTp37bEootHouWQyeUUQBLd16aCpqgrTNLm\u002Bvr4jfr\u002B/u1KprFJemooQR74cxznMRe3X0hJeTEzw6XT6hNfr7aGpeCy\u002BQ6BQKNSZWNiGzPhw8sIQ\u002BpPXMJi8qrZFo5JNdwqwLFtnu/Dj3cImnn5awaM383g5u\u002BYRIsebI5HIXvoOAauIBy2br\u002BDLz3UsrRWQXi8itZrnNdZjtZu3\u002BA4BCzox8WfbwLNZET8yeUQP\u002B9AScIMYGkyj6h7oMW5Njt\u002BeM7WNobo2WiiVSigqBJNzRXz7W6QdqAL0ItE1MKYBwccg6FoBdnMthD/2wBEBIQSyokHcLkPVVESCJobPVzFyUcaNfgXXYyLaG9cBdQvQNnsdEYRCISisggZ\u002BCwZ99eYAh1jrPM2VUPUqWEOCi9AmGGVagIDiiIB\u002BV/hpec60\u002BtEmeNHRRNDAyODNMnhocJmUxPh0NHRLhA0/dkQgyzKsCbt8tgWJ00fRFPhOh4G\u002BRgsLrhVwew2NOzWjch2vFuZ\u002Bj9UJTE9Pgw6TvdtHJC4UPCYTgrpBwzZh\u002Bno0SY98HRt//2R0dHSrJqBp2nP6Td/mcrm6tIYGR5qZQ3fuQxcvgfWXGHf7bOWf9IFy6TAB/wHvDCS96T4l0wAAAABJRU5ErkJggg==",
               "WhenOpened": "2025-07-09T14:10:39.442Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
               "Title": "tcp_server.py",
-              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\Scripts\\tcp_server.py",
+              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\Scripts\\tcp_server.py",
               "RelativeDocumentMoniker": "Raman1.0\\Scripts\\tcp_server.py",
-              "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\Scripts\\tcp_server.py",
+              "ToolTip": "C:\\Users\\Wilson\\Desktop\\New Raman\\Automatic-Optical-Inspection-System-With-Adding-Raman-Spectroscopy\\Raman2.0\\Raman1.0\\Scripts\\tcp_server.py",
               "RelativeToolTip": "Raman1.0\\Scripts\\tcp_server.py",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAwAAAAAAAAAA==",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMuSURBVDhPrVTPTxNREP627e7SQm0F2mKLUEVICP5IMBqUhB6NJ4/GGGPwoIf\u002BCR7VxBBPhnAxAeVC4kEuJB6Qi0Y8oCGKpoKQUpEWAhX6c7vb3X1Ol5UauzEc/JLJm31v3pdv5u0M/isYY5zpGohEIs8GBgZu8Dxv7tQik8mwbDb7YGpq6lEqlcqa2/twmOs\u002BBgcHEQgEzK9azMzMsHg8fsdut7Pp6enHKysrafPIQA1hBRRkelUQAcLhMEi9jTLxdnZ23pZl2elwOIYWFxe3zTBrwmAwaHpVcFy1OoIg8P39/c1Efo3KJquq\u002BpBEFCpnNiPiL9CFGvtd14rSyclJDA8P22dnZ1tcLlevKIp\u002B45BgqXBpacn0qqDUQGniXN9F9J6/AIeNg1TIyaOjo9/NEAOWhN3d3aZXRV5W8Sq2jY2sBElSwFNuR9x2x5HWtkabrZrogRXKDUEsb\u002BSxmSlg7tsG1LICX4PAX\u002Blpbff7/Q1mmHUNK6/5t2WKKt4uphBbS0NXy2QasvkiV1RtTrfb7TKvWhNWoGkaNHD4ulXGxNwmPibSOH3Ui95wI5rqeahESq8Ln7dwavLpjXe69HlB1/U2y5RXV1eNdb3E48VCDuvpHF1WoJWJhEyjdHWNVNKvJHBbgDQPlOZ74Ls7ZKmwq6vLsCKrw\u002BZu3lCjl1UquA6P0wGPi4eX7EzYhdNB6j5NoiL/AJS1S5YKY7GYsa6tS5BlUkOptTU6EI1IcNp3aQboNAh0eIUdhJybgFrcI9V2Pf9U2B4KQKCIisLbEQFnWz6gx7eMk/4VnGyOobU\u002BDk79SQF5IqNG4YM7loSKohjWfljE8WYn3KIdvkM6OKYBukIEMq2kkj7BiIJRF9Wd0iCEnlimnEwmjVUkuxU5jgzdD3jooUpEppWosT1kTlJE/S127UA89gV1J76Nj48PWRJ2dHSY3h4qg0HUkwz5AmcQajRc6vtIGRHam9aev1y/9/r1xNuRkZFiDeHY2Nj\u002BIPgTN69fThwVQ2Eon4iQHiD3HqzhPNOcvek3b\u002B7HK2Rm6MFAY\u002BoQ08uPWCmRYvl5ncnJBO29JLsajUbDe1HAL6CnYE1YMsFsAAAAAElFTkSuQmCC",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKfSURBVDhPZVNLTBNRFD0znSn90MZpBaEKKYjEX4BEk2qhhgXRdOXGBStMdOPGlew1Lty5cePKhJgQjSQmmGhijBo0MRKIRgJFAastoSBDWyjT6XQ\u002Bb3wDk4ZmTnKT9\u002B4777z7eZeBjXg8HkgkEoLH42FtVw2KomBnZ0deXFwsTE1N6bYbIOQzZy/B8/xwZ2fnw3A43Gi7apAkycxmszO6rt8VRfFjKpVS9w5YNlETsBCLxRAMBu3dPqgwqtUqs7y83NvV1XWPRtNYLpdfZzIZxTp37bEootHouWQyeUUQBLd16aCpqgrTNLm\u002Bvr4jfr\u002B/u1KprFJemooQR74cxznMRe3X0hJeTEzw6XT6hNfr7aGpeCy\u002BQ6BQKNSZWNiGzPhw8sIQ\u002BpPXMJi8qrZFo5JNdwqwLFtnu/Dj3cImnn5awaM383g5u\u002BYRIsebI5HIXvoOAauIBy2br\u002BDLz3UsrRWQXi8itZrnNdZjtZu3\u002BA4BCzox8WfbwLNZET8yeUQP\u002B9AScIMYGkyj6h7oMW5Njt\u002BeM7WNobo2WiiVSigqBJNzRXz7W6QdqAL0ItE1MKYBwccg6FoBdnMthD/2wBEBIQSyokHcLkPVVESCJobPVzFyUcaNfgXXYyLaG9cBdQvQNnsdEYRCISisggZ\u002BCwZ99eYAh1jrPM2VUPUqWEOCi9AmGGVagIDiiIB\u002BV/hpec60\u002BtEmeNHRRNDAyODNMnhocJmUxPh0NHRLhA0/dkQgyzKsCbt8tgWJ00fRFPhOh4G\u002BRgsLrhVwew2NOzWjch2vFuZ\u002Bj9UJTE9Pgw6TvdtHJC4UPCYTgrpBwzZh\u002Bno0SY98HRt//2R0dHSrJqBp2nP6Td/mcrm6tIYGR5qZQ3fuQxcvgfWXGHf7bOWf9IFy6TAB/wHvDCS96T4l0wAAAABJRU5ErkJggg==",
               "WhenOpened": "2025-07-09T14:05:06.132Z"
-            }
-          ]
-        },
-        {
-          "DockedHeight": 62,
-          "SelectedChildIndex": -1,
-          "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             }
           ]
         }
