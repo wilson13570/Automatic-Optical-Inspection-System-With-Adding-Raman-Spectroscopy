@@ -80,6 +80,9 @@
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
             this.pictureBox9 = new System.Windows.Forms.PictureBox();
             this.listBoxLog = new System.Windows.Forms.ListBox();
+            this.panelSpectrometer = new Raman1._0.SpectrometerPanel();
+            this.spectrometerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelAuto.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCamera)).BeginInit();
@@ -108,6 +111,8 @@
             this.mANUALToolStripMenuItem,
             this.toolStripMenuItem3,
             this.lOGToolStripMenuItem,
+            this.toolStripMenuItem6,
+            this.spectrometerToolStripMenuItem,
             this.toolStripMenuItem4,
             this.sETToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -284,7 +289,7 @@
             this.sizeComboBox.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sizeComboBox.FormattingEnabled = true;
             this.sizeComboBox.Location = new System.Drawing.Point(72, 424);
-            this.sizeComboBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.sizeComboBox.Margin = new System.Windows.Forms.Padding(4);
             this.sizeComboBox.Name = "sizeComboBox";
             this.sizeComboBox.Size = new System.Drawing.Size(208, 30);
             this.sizeComboBox.TabIndex = 14;
@@ -294,7 +299,7 @@
             // 
             this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.progressBar1.Location = new System.Drawing.Point(0, 1032);
-            this.progressBar1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(4);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(2539, 29);
             this.progressBar1.TabIndex = 13;
@@ -326,7 +331,7 @@
             // picCamera
             // 
             this.picCamera.Location = new System.Drawing.Point(1600, 625);
-            this.picCamera.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.picCamera.Margin = new System.Windows.Forms.Padding(4);
             this.picCamera.Name = "picCamera";
             this.picCamera.Size = new System.Drawing.Size(853, 600);
             this.picCamera.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -338,7 +343,7 @@
             this.btnAutoCal.BackColor = System.Drawing.Color.White;
             this.btnAutoCal.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAutoCal.Location = new System.Drawing.Point(148, 928);
-            this.btnAutoCal.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnAutoCal.Margin = new System.Windows.Forms.Padding(4);
             this.btnAutoCal.Name = "btnAutoCal";
             this.btnAutoCal.Size = new System.Drawing.Size(133, 125);
             this.btnAutoCal.TabIndex = 8;
@@ -351,7 +356,7 @@
             this.btnAutoFocus.BackColor = System.Drawing.Color.White;
             this.btnAutoFocus.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAutoFocus.Location = new System.Drawing.Point(148, 740);
-            this.btnAutoFocus.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnAutoFocus.Margin = new System.Windows.Forms.Padding(4);
             this.btnAutoFocus.Name = "btnAutoFocus";
             this.btnAutoFocus.Size = new System.Drawing.Size(133, 125);
             this.btnAutoFocus.TabIndex = 7;
@@ -364,7 +369,7 @@
             this.btnAutoScan.BackColor = System.Drawing.Color.White;
             this.btnAutoScan.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAutoScan.Location = new System.Drawing.Point(148, 552);
-            this.btnAutoScan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnAutoScan.Margin = new System.Windows.Forms.Padding(4);
             this.btnAutoScan.Name = "btnAutoScan";
             this.btnAutoScan.Size = new System.Drawing.Size(133, 125);
             this.btnAutoScan.TabIndex = 6;
@@ -394,7 +399,7 @@
             // btnB
             // 
             this.btnB.Location = new System.Drawing.Point(301, 836);
-            this.btnB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnB.Margin = new System.Windows.Forms.Padding(4);
             this.btnB.Name = "btnB";
             this.btnB.Size = new System.Drawing.Size(63, 60);
             this.btnB.TabIndex = 9;
@@ -405,7 +410,7 @@
             // btnL
             // 
             this.btnL.Location = new System.Drawing.Point(4, 576);
-            this.btnL.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnL.Margin = new System.Windows.Forms.Padding(4);
             this.btnL.Name = "btnL";
             this.btnL.Size = new System.Drawing.Size(63, 60);
             this.btnL.TabIndex = 8;
@@ -416,7 +421,7 @@
             // btnF
             // 
             this.btnF.Location = new System.Drawing.Point(301, 310);
-            this.btnF.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnF.Margin = new System.Windows.Forms.Padding(4);
             this.btnF.Name = "btnF";
             this.btnF.Size = new System.Drawing.Size(63, 60);
             this.btnF.TabIndex = 7;
@@ -427,7 +432,7 @@
             // btnR
             // 
             this.btnR.Location = new System.Drawing.Point(603, 576);
-            this.btnR.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnR.Margin = new System.Windows.Forms.Padding(4);
             this.btnR.Name = "btnR";
             this.btnR.Size = new System.Drawing.Size(63, 60);
             this.btnR.TabIndex = 6;
@@ -514,7 +519,7 @@
             this.panelLog.Controls.Add(this.listBoxLog);
             this.panelLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelLog.Location = new System.Drawing.Point(0, 0);
-            this.panelLog.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelLog.Margin = new System.Windows.Forms.Padding(4);
             this.panelLog.Name = "panelLog";
             this.panelLog.Size = new System.Drawing.Size(2539, 1061);
             this.panelLog.TabIndex = 16;
@@ -523,7 +528,7 @@
             // 
             this.btnAnalyze.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAnalyze.Location = new System.Drawing.Point(2360, 1184);
-            this.btnAnalyze.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnAnalyze.Margin = new System.Windows.Forms.Padding(4);
             this.btnAnalyze.Name = "btnAnalyze";
             this.btnAnalyze.Size = new System.Drawing.Size(117, 51);
             this.btnAnalyze.TabIndex = 3;
@@ -547,7 +552,7 @@
             this.tableLayoutPanelPreview.Controls.Add(this.pictureBox8, 1, 2);
             this.tableLayoutPanelPreview.Controls.Add(this.pictureBox9, 2, 2);
             this.tableLayoutPanelPreview.Location = new System.Drawing.Point(623, 165);
-            this.tableLayoutPanelPreview.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanelPreview.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanelPreview.Name = "tableLayoutPanelPreview";
             this.tableLayoutPanelPreview.RowCount = 3;
             this.tableLayoutPanelPreview.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.3F));
@@ -560,7 +565,7 @@
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(4, 4);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(611, 328);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -571,7 +576,7 @@
             // 
             this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox2.Location = new System.Drawing.Point(623, 4);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(611, 328);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -582,7 +587,7 @@
             // 
             this.pictureBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox3.Location = new System.Drawing.Point(1242, 4);
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(613, 328);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -593,7 +598,7 @@
             // 
             this.pictureBox4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox4.Location = new System.Drawing.Point(4, 340);
-            this.pictureBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox4.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(611, 328);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -604,7 +609,7 @@
             // 
             this.pictureBox5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox5.Location = new System.Drawing.Point(623, 340);
-            this.pictureBox5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox5.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(611, 328);
             this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -615,7 +620,7 @@
             // 
             this.pictureBox6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox6.Location = new System.Drawing.Point(1242, 340);
-            this.pictureBox6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox6.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox6.Name = "pictureBox6";
             this.pictureBox6.Size = new System.Drawing.Size(613, 328);
             this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -626,7 +631,7 @@
             // 
             this.pictureBox7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox7.Location = new System.Drawing.Point(4, 676);
-            this.pictureBox7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox7.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox7.Name = "pictureBox7";
             this.pictureBox7.Size = new System.Drawing.Size(611, 331);
             this.pictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -637,7 +642,7 @@
             // 
             this.pictureBox8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox8.Location = new System.Drawing.Point(623, 676);
-            this.pictureBox8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox8.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox8.Name = "pictureBox8";
             this.pictureBox8.Size = new System.Drawing.Size(611, 331);
             this.pictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -648,7 +653,7 @@
             // 
             this.pictureBox9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox9.Location = new System.Drawing.Point(1242, 676);
-            this.pictureBox9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox9.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox9.Name = "pictureBox9";
             this.pictureBox9.Size = new System.Drawing.Size(613, 331);
             this.pictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -660,11 +665,36 @@
             this.listBoxLog.FormattingEnabled = true;
             this.listBoxLog.ItemHeight = 15;
             this.listBoxLog.Location = new System.Drawing.Point(180, 165);
-            this.listBoxLog.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listBoxLog.Margin = new System.Windows.Forms.Padding(4);
             this.listBoxLog.Name = "listBoxLog";
             this.listBoxLog.Size = new System.Drawing.Size(371, 1069);
             this.listBoxLog.TabIndex = 1;
             this.listBoxLog.SelectedIndexChanged += new System.EventHandler(this.listBoxLog_SelectedIndexChanged);
+            // 
+            // panelSpectrometer
+            // 
+            this.panelSpectrometer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelSpectrometer.Location = new System.Drawing.Point(0, 0);
+            this.panelSpectrometer.Name = "panelSpectrometer";
+            this.panelSpectrometer.Size = new System.Drawing.Size(2539, 1061);
+            this.panelSpectrometer.TabIndex = 17;
+            this.panelSpectrometer.Visible = false;
+            // 
+            // spectrometerToolStripMenuItem
+            // 
+            this.spectrometerToolStripMenuItem.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.spectrometerToolStripMenuItem.Name = "spectrometerToolStripMenuItem";
+            this.spectrometerToolStripMenuItem.Size = new System.Drawing.Size(129, 27);
+            this.spectrometerToolStripMenuItem.Text = "Spectrometer";
+            this.spectrometerToolStripMenuItem.Click += new System.EventHandler(this.spectrometerToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem6
+            // 
+            this.toolStripMenuItem6.Enabled = false;
+            this.toolStripMenuItem6.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(27, 27);
+            this.toolStripMenuItem6.Text = "|";
             // 
             // MainForm
             // 
@@ -672,10 +702,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2539, 1061);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.panelSpectrometer);
             this.Controls.Add(this.panelAuto);
             this.Controls.Add(this.panelManual);
             this.Controls.Add(this.panelLog);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainForm";
             this.Text = "自動光學晶圓檢測系統";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -755,5 +786,8 @@
         private System.Windows.Forms.Button btnR;
         private System.Windows.Forms.Button btnB;
         private System.Windows.Forms.Button btnL;
+        private Raman1._0.SpectrometerPanel panelSpectrometer;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
+        private System.Windows.Forms.ToolStripMenuItem spectrometerToolStripMenuItem;
     }
 }

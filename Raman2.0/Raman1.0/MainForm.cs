@@ -73,6 +73,7 @@ namespace Raman1._0
             panelAuto.Visible = true;
             panelManual.Visible = false;
             panelLog.Visible = false;
+            panelSpectrometer.Visible = false;
             sizeComboBox.Items.Add("3×3");
             sizeComboBox.Items.Add("5×5");
             sizeComboBox.Items.Add("7×7");
@@ -103,6 +104,9 @@ namespace Raman1._0
 
                 panelLog.BackgroundImage = bgImage;
                 panelLog.BackgroundImageLayout = ImageLayout.Stretch;
+
+                panelSpectrometer.BackgroundImage = bgImage;
+                panelSpectrometer.BackgroundImageLayout = ImageLayout.Stretch;
             }
             else
             {
@@ -243,6 +247,7 @@ namespace Raman1._0
             panelAuto.Visible = true;
             panelManual.Visible = false;
             panelLog.Visible = false;
+            panelSpectrometer.Visible = false;
             // 回傳 PictureBox 到 Auto Panel
             panelManual.Controls.Remove(picCamera);
             panelAuto.Controls.Add(picCamera);
@@ -280,6 +285,7 @@ namespace Raman1._0
             panelAuto.Visible = false;
             panelManual.Visible = true;
             panelLog.Visible = false;
+            panelSpectrometer.Visible = false;
             // 將 PictureBox 加到 Manual Panel 顯示
             panelAuto.Controls.Remove(picCamera);         // 移出 Auto Panel
             panelManual.Controls.Add(picCamera);          // 加入 Manual Panel
@@ -518,6 +524,7 @@ namespace Raman1._0
             panelAuto.Visible = false;
             panelManual.Visible = false;
             panelLog.Visible = true;
+            panelSpectrometer.Visible = false;
         }
         private void LoadSampleList()
         {
@@ -1086,6 +1093,17 @@ namespace Raman1._0
             }
         }
 
+        private void spectrometerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DetachCameraFromAllPanels();   // 先把相機 PictureBox 移出所有 Panel
+
+            panelAuto.Visible = false;
+            panelManual.Visible = false;
+            panelLog.Visible = false;
+            panelSpectrometer.Visible = true;   // 只顯示光譜儀 Panel
+
+            // 目前 SpectrometerPanel 不用顯示相機，所以不用把 picCamera 加進去
+        }
 
     }
 }
