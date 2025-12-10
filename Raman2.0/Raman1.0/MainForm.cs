@@ -23,7 +23,7 @@ namespace Raman1._0
     public partial class MainForm : Form
     {
         private SerialPort serialPort;  //declare
-        private FilterInfoCollection videoDevices;  
+        private FilterInfoCollection videoDevices;
         private VideoCaptureDevice videoSource;
         private string selectedPythonScriptPath = null;
         private System.Windows.Forms.Timer runTimeTimer; // 用來計時的 Timer
@@ -289,7 +289,7 @@ namespace Raman1._0
             // 將 PictureBox 加到 Manual Panel 顯示
             panelAuto.Controls.Remove(picCamera);         // 移出 Auto Panel
             panelManual.Controls.Add(picCamera);          // 加入 Manual Panel
-            picCamera.Location = new Point(1200,500);     // 重新設定位置（根據 Manual 版面）
+            picCamera.Location = new Point(1200, 500);     // 重新設定位置（根據 Manual 版面）
         }
 
         private void btnForward_Click(object sender, EventArgs e)
@@ -754,7 +754,7 @@ namespace Raman1._0
             TimeSpan elapsed = DateTime.Now - startTime;
             labelRunTimeV.Text = elapsed.ToString(@"mm\:ss");
         }
-        private  void StartProgressListener()
+        private void StartProgressListener()
         {
             progressCts = new CancellationTokenSource();
             progressListener = new TcpListener(System.Net.IPAddress.Any, 5001);

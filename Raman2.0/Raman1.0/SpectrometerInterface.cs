@@ -1,168 +1,256 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Raman1._0
 {
-    static class SpectrometerInterface
+    /// <summary>
+    /// 封裝 SD1200-UVN 的 SDK 呼叫邏輯，只提供本專案需要的幾個功能：
+    /// 1. 初始化並開啟第一台找到的光譜儀
+    /// 2. 取得一次光譜（強度陣列 + 對應波長 + 最大值資訊）
+    /// 3. 關閉裝置
+    /// </summary>
+    internal static class SpectrometerInterface
     {
-        #region SDK DLL Function Imports (P/Invoke)
-        private const string SDK_DLL = @"SDK_DLL\UserApplication.dll";
+        // DLL 走相對路徑：bin\Debug\SDK_DLL\UserApplication.dll
+        private const string SDK_DLL = "SDK_DLL\\UserApplication.dll";
 
-        [DllImport(SDK_DLL, CallingConvention = CallingConvention.StdCall)]
-        public static extern uint UAI_SpectrometerGetDeviceList(out uint number, [Out] uint[] list);
+        #region P/Invoke 宣告（全部改用 Cdecl，避免 PInvokeStackImbalance）
 
-        [DllImport(SDK_DLL, CallingConvention = CallingConvention.StdCall)]
-        public static extern uint UAI_SpectrometerGetDeviceAmount(uint vid, uint pid, out uint deviceCount);
+        // 3.3.3 UAI_SpectrometerGetDeviceList
+        [DllImport(SDK_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern uint UAI_SpectrometerGetDeviceList(
+            out uint number,
+            [Out] uint[] list);
 
-        [DllImport(SDK_DLL, CallingConvention = CallingConvention.StdCall)]
-        public static extern uint UAI_SpectrometerOpen(uint index, out IntPtr handle, uint vid, uint pid);
+        // 3.3.2 UAI_SpectrometerGetDeviceAmount
+        [DllImport(SDK_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern uint UAI_SpectrometerGetDeviceAmount(
+            uint vid,
+            uint pid,
+            out uint deviceCount);
 
-        [DllImport(SDK_DLL, CallingConvention = CallingConvention.StdCall)]
-        public static extern uint UAI_SpectrometerClose(IntPtr handle);
+        // 3.3.1 UAI_SpectrometerOpen
+        [DllImport(SDK_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern uint UAI_SpectrometerOpen(
+            uint index,
+            out IntPtr handle,
+            uint vid,
+            uint pid);
 
-        [DllImport(SDK_DLL, CallingConvention = CallingConvention.StdCall)]
-        public static extern uint UAI_SpectrometerGetSerialNumber(IntPtr handle, [Out] byte[] serial);
+        // 3.3.4 UAI_SpectrometerClose
+        [DllImport(SDK_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern uint UAI_SpectrometerClose(
+            IntPtr handle);
 
-        [DllImport(SDK_DLL, CallingConvention = CallingConvention.StdCall)]
-        public static extern uint UAI_SpectrometerGetModelName(IntPtr handle, [Out] byte[] model);
+        // 3.3.7 UAI_SpectromoduleGetFrameSize
+        [DllImport(SDK_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern uint UAI_SpectromoduleGetFrameSize(
+            IntPtr handle,
+            out ushort frameSize);
 
-        [DllImport(SDK_DLL, CallingConvention = CallingConvention.StdCall)]
-        public static extern uint UAI_SpectromoduleGetFrameSize(IntPtr handle, out ushort size);
+        // 3.3.8 UAI_SpectrometerWavelengthAcquire
+        [DllImport(SDK_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern uint UAI_SpectrometerWavelengthAcquire(
+            IntPtr handle,
+            [Out] float[] wavelengthArray);
 
-        [DllImport(SDK_DLL, CallingConvention = CallingConvention.StdCall)]
-        public static extern uint UAI_SpectrometerWavelengthAcquire(IntPtr handle, [Out] float[] wavelengthArray);
+        // 3.3.10 UAI_SpectrometerDataAcquire
+        [DllImport(SDK_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern uint UAI_SpectrometerDataAcquire(
+            IntPtr handle,
+            uint integration_time_us,
+            [Out] float[] buffer,
+            uint average);
 
-        [DllImport(SDK_DLL, CallingConvention = CallingConvention.StdCall)]
-        public static extern uint UAI_SpectrometerDataOneshot(IntPtr handle, uint integration_time_us, [Out] float[] buffer, uint average);
         #endregion
 
-        /// <summary>
-        /// 初始化光譜儀，取得所有已連接裝置的總數量
-        /// </summary>
-        public static bool Initialize(out uint totalDevices)
-        {
-            totalDevices = 0;
-            uint status;
-            uint listCount = 0;
-            uint[] vidPidList = new uint[16];  // 緩衝陣列，用來存放 VID/PID 列表 (假設最多支援8組裝置類型)
-            status = UAI_SpectrometerGetDeviceList(out listCount, vidPidList);
-            if (status != 0 || listCount == 0)
-            {
-                // 如果status非0代表函式執行錯誤；或listCount為0代表SDK無支援的裝置類型
-                return false;
-            }
-            // 逐一查詢每組 VID/PID 有幾台裝置連接
-            for (int i = 0; i < listCount * 2; i += 2)
-            {
-                uint vid = vidPidList[i];
-                uint pid = vidPidList[i + 1];
-                uint count = 0;
-                status = UAI_SpectrometerGetDeviceAmount(vid, pid, out count);
-                if (status != 0)
-                {
-                    return false;
-                }
-                totalDevices += count;
-            }
-            return true;
-        }
+        /// <summary>目前光譜資料點數 (frame size)</summary>
+        public static int FrameSize { get; private set; }
+
+        /// <summary>每個資料點對應的波長 (nm)</summary>
+        public static float[] Wavelengths { get; private set; }
 
         /// <summary>
-        /// 開啟指定的光譜儀裝置 (依序號索引)，並取得設備序號與型號
+        /// 掃描並開啟第一台找到的光譜儀，同時讀取 frameSize 與 wavelength 表。
+        /// 成功回傳 true，失敗回傳 false 並帶出錯誤訊息。
         /// </summary>
-        public static bool OpenDevice(uint deviceIndex, out IntPtr handle, out string serial, out string model)
+        public static bool Initialize(out IntPtr handle, out string errorMessage)
         {
             handle = IntPtr.Zero;
-            serial = string.Empty;
-            model = string.Empty;
-            // 取得支援的 VID/PID 列表
-            uint listCount = 0;
-            uint[] vidPidList = new uint[16];
-            uint status = UAI_SpectrometerGetDeviceList(out listCount, vidPidList);
-            if (status != 0 || listCount == 0)
+            errorMessage = string.Empty;
+
+            try
             {
+                uint status;
+
+                // 1. 取得支援的 VID / PID 列表
+                uint listCount = 0;
+                uint[] vidPidList = new uint[16]; // 最多 8 組 VID/PID
+                status = UAI_SpectrometerGetDeviceList(out listCount, vidPidList);
+                if (status != 0 || listCount == 0)
+                {
+                    errorMessage = $"UAI_SpectrometerGetDeviceList 失敗或無裝置，status = 0x{status:X8}";
+                    return false;
+                }
+
+                // 2. 對每一組 VID/PID 嘗試尋找裝置數量並開啟第 0 台
+                for (int i = 0; i < listCount * 2; i += 2)
+                {
+                    uint vid = vidPidList[i];
+                    uint pid = vidPidList[i + 1];
+
+                    uint deviceCount;
+                    status = UAI_SpectrometerGetDeviceAmount(vid, pid, out deviceCount);
+                    if (status != 0)
+                    {
+                        // 先略過這組 VID/PID
+                        continue;
+                    }
+
+                    if (deviceCount == 0)
+                        continue;
+
+                    status = UAI_SpectrometerOpen(0, out handle, vid, pid);
+                    if (status == 0 && handle != IntPtr.Zero)
+                    {
+                        // 開啟成功
+                        break;
+                    }
+                    else
+                    {
+                        handle = IntPtr.Zero;
+                    }
+                }
+
+                if (handle == IntPtr.Zero)
+                {
+                    errorMessage = "找不到可開啟的光譜儀裝置。";
+                    return false;
+                }
+
+                // 3. 讀取 frame size
+                ushort frameSize;
+                status = UAI_SpectromoduleGetFrameSize(handle, out frameSize);
+                if (status != 0 || frameSize == 0)
+                {
+                    errorMessage = $"UAI_SpectromoduleGetFrameSize 失敗，status = 0x{status:X8}";
+                    return false;
+                }
+
+                FrameSize = frameSize;
+
+                // 4. 讀取波長表
+                Wavelengths = new float[FrameSize];
+                status = UAI_SpectrometerWavelengthAcquire(handle, Wavelengths);
+                if (status != 0)
+                {
+                    errorMessage = $"UAI_SpectrometerWavelengthAcquire 失敗，status = 0x{status:X8}";
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Initialize 例外：" + ex.Message;
                 return false;
             }
-            // 取第一組 VID/PID 來開啟裝置 (假設 SD1200 是唯一支援類型)
-            uint vid = vidPidList[0];
-            uint pid = vidPidList[1];
-            status = UAI_SpectrometerOpen(deviceIndex, out handle, vid, pid);
-            if (status != 0 || handle == IntPtr.Zero)
-            {
-                return false;
-            }
-            // 取得裝置序號與型號（各 16 bytes）
-            byte[] serialBytes = new byte[16];
-            byte[] modelBytes = new byte[16];
-            UAI_SpectrometerGetSerialNumber(handle, serialBytes);
-            UAI_SpectrometerGetModelName(handle, modelBytes);
-            // 將 byte 陣列轉換成字串，去除 '\0' 結尾
-            serial = Encoding.ASCII.GetString(serialBytes).TrimEnd('\0');
-            model = Encoding.ASCII.GetString(modelBytes).TrimEnd('\0');
-            return true;
         }
 
         /// <summary>
-        /// 單次擷取光譜，回傳最大強度及其對應波長
+        /// 擷取一次光譜資料。
+        /// intensities 長度需 >= FrameSize。
+        /// integrationTimeUs 單位為微秒，例如 200000 代表 200 ms。
+        /// average 建議先給 1。
         /// </summary>
-        public static bool CaptureSpectrum(IntPtr handle, out float maxIntensity, out float maxWavelength)
+        public static bool AcquireSpectrum(
+            IntPtr handle,
+            uint integrationTimeUs,
+            uint average,
+            float[] intensities,
+            out float maxIntensity,
+            out float maxWavelength,
+            out string errorMessage)
         {
             maxIntensity = 0f;
             maxWavelength = 0f;
-            if (handle == IntPtr.Zero) return false;
-            // 取得光譜資料長度 (frame size)
-            ushort frameSize = 0;
-            uint status = UAI_SpectromoduleGetFrameSize(handle, out frameSize);
-            if (status != 0 || frameSize == 0)
+            errorMessage = string.Empty;
+
+            if (handle == IntPtr.Zero)
             {
+                errorMessage = "AcquireSpectrum: handle 為 0，尚未初始化裝置。";
                 return false;
             }
-            // 建立緩衝陣列以存放光譜強度資料與對應波長
-            float[] intensityArray = new float[frameSize];
-            float[] wavelengthArray = new float[frameSize];
-            // 設定積分時間和平均次數（例如 100ms、平均1次）
-            uint integrationTimeUs = 100_000;  // 100,000 微秒 = 100 毫秒
-            uint averageCount = 1;
-            // 擷取光譜強度資料
-            status = UAI_SpectrometerDataOneshot(handle, integrationTimeUs, intensityArray, averageCount);
-            if (status != 0)
+
+            if (FrameSize <= 0 || Wavelengths == null)
             {
+                errorMessage = "AcquireSpectrum: FrameSize / Wavelengths 尚未初始化。";
                 return false;
             }
-            // 獲取波長陣列
-            status = UAI_SpectrometerWavelengthAcquire(handle, wavelengthArray);
-            if (status != 0)
+
+            if (intensities == null || intensities.Length < FrameSize)
             {
+                errorMessage = "AcquireSpectrum: intensities 陣列長度不足。";
                 return false;
             }
-            // 找出最大強度值及其索引
-            float maxVal = -1f;
-            int maxIndex = -1;
-            for (int i = 0; i < frameSize; i++)
+
+            try
             {
-                if (intensityArray[i] > maxVal)
+                uint status = UAI_SpectrometerDataAcquire(
+                    handle,
+                    integrationTimeUs,
+                    intensities,
+                    average);
+
+                if (status != 0)
                 {
-                    maxVal = intensityArray[i];
-                    maxIndex = i;
+                    errorMessage = $"UAI_SpectrometerDataAcquire 失敗，status = 0x{status:X8}";
+                    return false;
                 }
+
+                // 找出最大值與對應波長
+                float localMax = float.MinValue;
+                int maxIndex = 0;
+                for (int i = 0; i < FrameSize; i++)
+                {
+                    float v = intensities[i];
+                    if (v > localMax)
+                    {
+                        localMax = v;
+                        maxIndex = i;
+                    }
+                }
+
+                if (localMax < 0) localMax = 0;
+                maxIntensity = localMax;
+                maxWavelength = Wavelengths != null && Wavelengths.Length > maxIndex
+                    ? Wavelengths[maxIndex]
+                    : 0f;
+
+                return true;
             }
-            if (maxIndex >= 0)
+            catch (Exception ex)
             {
-                maxIntensity = maxVal;
-                maxWavelength = wavelengthArray[maxIndex];
+                errorMessage = "AcquireSpectrum 例外：" + ex.Message;
+                return false;
             }
-            return true;
         }
 
         /// <summary>
-        /// 關閉光譜儀裝置（釋放資源）
+        /// 關閉光譜儀裝置
         /// </summary>
-        public static void CloseDevice(IntPtr handle)
+        public static void Close(IntPtr handle)
         {
             if (handle != IntPtr.Zero)
             {
-                UAI_SpectrometerClose(handle);
+                try
+                {
+                    UAI_SpectrometerClose(handle);
+                }
+                catch
+                {
+                    // 忽略關閉錯誤
+                }
             }
         }
     }
