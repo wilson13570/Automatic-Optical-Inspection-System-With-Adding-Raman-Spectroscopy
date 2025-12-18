@@ -1,5 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
+using System.Globalization;
+
+
 
 namespace Raman1._0
 {
@@ -13,6 +19,13 @@ namespace Raman1._0
     {
         // DLL 走相對路徑：bin\Debug\SDK_DLL\UserApplication.dll
         private const string SDK_DLL = "SDK_DLL\\UserApplication.dll";
+        // ===== Integration Time / ADC Range (safe defaults) =====
+        // 單位：微秒 (µs)
+        public const uint IntegrationTimeMinUs = 500;
+        public const uint IntegrationTimeMaxUs = 10_000_000; // 10 s
+
+        // 16-bit ADC 常見上限（你的截圖也出現 65535）
+        public const float AdcMaxValue = 65535f;
 
         #region P/Invoke 宣告（全部改用 Cdecl，避免 PInvokeStackImbalance）
 
@@ -70,6 +83,8 @@ namespace Raman1._0
         /// <summary>每個資料點對應的波長 (nm)</summary>
         public static float[] Wavelengths { get; private set; }
 
+        /// <summary>暗背景光譜資料（與 Wavelengths 對應的強度值）</summary>
+        public static float[] DarkBackground { get; private set; }
         /// <summary>
         /// 掃描並開啟第一台找到的光譜儀，同時讀取 frameSize 與 wavelength 表。
         /// 成功回傳 true，失敗回傳 false 並帶出錯誤訊息。
@@ -147,7 +162,10 @@ namespace Raman1._0
                     errorMessage = $"UAI_SpectrometerWavelengthAcquire 失敗，status = 0x{status:X8}";
                     return false;
                 }
-
+                // 在成功初始化後嘗試載入先前儲存的暗背景
+                DarkBackground = null;
+                string darkErr;
+                LoadDarkBackgroundFromFile(out darkErr);
                 return true;
             }
             catch (Exception ex)
@@ -253,5 +271,142 @@ namespace Raman1._0
                 }
             }
         }
+        #region Dark Background Management
+        #region Dark Background Management (C# 7.3 compatible)
+
+        private static string GetDarkFilePath()
+        {
+            // 放在執行檔同資料夾
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "background_dark.csv");
+        }
+
+        /// <summary>
+        /// 設定暗背景（會複製資料，避免外部陣列後續被改掉）
+        /// </summary>
+        public static bool SetDarkBackground(float[] background, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
+            if (background == null)
+            {
+                errorMessage = "暗背景資料為 null。";
+                return false;
+            }
+            if (FrameSize <= 0)
+            {
+                errorMessage = "FrameSize 尚未初始化。請先 Initialize。";
+                return false;
+            }
+            if (background.Length != FrameSize)
+            {
+                errorMessage = "暗背景資料長度與 FrameSize 不一致。";
+                return false;
+            }
+
+            var copy = new float[FrameSize];
+            Array.Copy(background, copy, FrameSize);
+            DarkBackground = copy;
+            return true;
+        }
+
+        /// <summary>
+        /// 將目前 DarkBackground 存到 CSV：每行 wavelength,intensity
+        /// </summary>
+        public static bool SaveDarkBackgroundToFile(out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
+            if (DarkBackground == null)
+            {
+                errorMessage = "尚未設定 DarkBackground，無法儲存。";
+                return false;
+            }
+            if (Wavelengths == null || Wavelengths.Length != FrameSize)
+            {
+                errorMessage = "Wavelengths 尚未就緒，無法儲存。";
+                return false;
+            }
+
+            try
+            {
+                string path = GetDarkFilePath();
+                using (var sw = new StreamWriter(path, false))
+                {
+                    for (int i = 0; i < FrameSize; i++)
+                    {
+                        // 用 InvariantCulture 避免小數點在不同系統變逗號
+                        string wl = Wavelengths[i].ToString("R", CultureInfo.InvariantCulture);
+                        string v = DarkBackground[i].ToString("R", CultureInfo.InvariantCulture);
+                        sw.WriteLine(wl + "," + v);
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "儲存暗背景失敗：" + ex.Message;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 從 CSV 載入 DarkBackground（檔案不存在則回傳 false，不視為錯誤）
+        /// </summary>
+        public static bool LoadDarkBackgroundFromFile(out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
+            try
+            {
+                string path = GetDarkFilePath();
+                if (!File.Exists(path))
+                {
+                    return false; // 沒有檔案就不載入
+                }
+
+                string[] lines = File.ReadAllLines(path);
+                if (FrameSize <= 0 || lines.Length != FrameSize)
+                {
+                    errorMessage = "暗背景檔案點數與目前 FrameSize 不一致，略過載入。";
+                    return false;
+                }
+
+                var bg = new float[FrameSize];
+                for (int i = 0; i < FrameSize; i++)
+                {
+                    // 格式：wavelength,intensity
+                    string line = lines[i];
+                    string[] parts = line.Split(',');
+                    if (parts.Length < 2)
+                    {
+                        errorMessage = "暗背景檔案格式錯誤（缺少逗號分隔）。";
+                        return false;
+                    }
+
+                    float intensity;
+                    if (!float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out intensity))
+                    {
+                        errorMessage = "暗背景檔案數值解析失敗（第 " + i + " 行）。";
+                        return false;
+                    }
+
+                    bg[i] = intensity;
+                }
+
+                DarkBackground = bg;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "載入暗背景失敗：" + ex.Message;
+                return false;
+            }
+        }
+
+        #endregion
+
+
+        #endregion
+
     }
 }

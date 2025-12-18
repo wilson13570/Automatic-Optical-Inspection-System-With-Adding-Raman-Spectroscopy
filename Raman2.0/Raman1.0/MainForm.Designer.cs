@@ -39,6 +39,8 @@
             this.mANUALToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.lOGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.spectrometerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.sETToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeSerialPortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,8 +83,6 @@
             this.pictureBox9 = new System.Windows.Forms.PictureBox();
             this.listBoxLog = new System.Windows.Forms.ListBox();
             this.panelSpectrometer = new Raman1._0.SpectrometerPanel();
-            this.spectrometerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelAuto.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCamera)).BeginInit();
@@ -192,6 +192,22 @@
             this.lOGToolStripMenuItem.Size = new System.Drawing.Size(54, 27);
             this.lOGToolStripMenuItem.Text = "Log";
             this.lOGToolStripMenuItem.Click += new System.EventHandler(this.lOGToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem6
+            // 
+            this.toolStripMenuItem6.Enabled = false;
+            this.toolStripMenuItem6.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(27, 27);
+            this.toolStripMenuItem6.Text = "|";
+            // 
+            // spectrometerToolStripMenuItem
+            // 
+            this.spectrometerToolStripMenuItem.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.spectrometerToolStripMenuItem.Name = "spectrometerToolStripMenuItem";
+            this.spectrometerToolStripMenuItem.Size = new System.Drawing.Size(129, 27);
+            this.spectrometerToolStripMenuItem.Text = "Spectrometer";
+            this.spectrometerToolStripMenuItem.Click += new System.EventHandler(this.spectrometerToolStripMenuItem_Click);
             // 
             // toolStripMenuItem4
             // 
@@ -679,22 +695,6 @@
             this.panelSpectrometer.Size = new System.Drawing.Size(2539, 1061);
             this.panelSpectrometer.TabIndex = 17;
             this.panelSpectrometer.Visible = false;
-            // 
-            // spectrometerToolStripMenuItem
-            // 
-            this.spectrometerToolStripMenuItem.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.spectrometerToolStripMenuItem.Name = "spectrometerToolStripMenuItem";
-            this.spectrometerToolStripMenuItem.Size = new System.Drawing.Size(129, 27);
-            this.spectrometerToolStripMenuItem.Text = "Spectrometer";
-            this.spectrometerToolStripMenuItem.Click += new System.EventHandler(this.spectrometerToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem6
-            // 
-            this.toolStripMenuItem6.Enabled = false;
-            this.toolStripMenuItem6.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(27, 27);
-            this.toolStripMenuItem6.Text = "|";
             // 
             // MainForm
             // 
