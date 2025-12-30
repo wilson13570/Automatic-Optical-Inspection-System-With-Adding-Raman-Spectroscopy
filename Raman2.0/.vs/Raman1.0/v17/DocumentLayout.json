@@ -3,20 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\spectrometerpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\spectrometerpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|c:\\users\\wilson\\desktop\\raman 3.0\\new-raman\\raman2.0\\raman1.0\\spectrometerinterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\spectrometerinterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|c:\\users\\wilson\\desktop\\raman 3.0\\new-raman\\raman2.0\\raman1.0\\spectrometerpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\spectrometerpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\spectrometerinterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\spectrometerinterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\spectrometerpanel.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\spectrometerpanel.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|solutionrelative:raman1.0\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BCDDFFC1-08AD-43C2-8504-0CCB7BBE606C}|Raman1.0\\Raman1.0.csproj|C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\raman1.0\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
@@ -38,44 +46,68 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
+              "Title": "MainForm.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\MainForm.Designer.cs",
+              "RelativeDocumentMoniker": "Raman1.0\\MainForm.Designer.cs",
+              "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\MainForm.Designer.cs",
+              "RelativeToolTip": "Raman1.0\\MainForm.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIsAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-19T04:47:52.102Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "SpectrometerPanel.cs",
               "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\SpectrometerPanel.cs",
               "RelativeDocumentMoniker": "Raman1.0\\SpectrometerPanel.cs",
               "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\SpectrometerPanel.cs",
               "RelativeToolTip": "Raman1.0\\SpectrometerPanel.cs",
-              "ViewState": "AgIAAGIBAAAAAAAAAAAowHQBAAARAAAAAAAAAA==",
+              "ViewState": "AgIAACMCAAAAAAAAAAAkwDcCAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-17T21:11:43.546Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
+              "Title": "MainForm.cs",
+              "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\MainForm.cs",
+              "RelativeDocumentMoniker": "Raman1.0\\MainForm.cs",
+              "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\MainForm.cs",
+              "RelativeToolTip": "Raman1.0\\MainForm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-19T04:47:58.227Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "MainForm.cs [\u8A2D\u8A08]",
               "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\MainForm.cs",
               "RelativeDocumentMoniker": "Raman1.0\\MainForm.cs",
               "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\MainForm.cs [\u8A2D\u8A08]",
               "RelativeToolTip": "Raman1.0\\MainForm.cs [\u8A2D\u8A08]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-15T12:47:49.24Z",
-              "EditorCaption": " [\u8A2D\u8A08]"
+              "WhenOpened": "2025-12-15T12:47:49.24Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "SpectrometerInterface.cs",
               "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\SpectrometerInterface.cs",
               "RelativeDocumentMoniker": "Raman1.0\\SpectrometerInterface.cs",
               "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\SpectrometerInterface.cs",
               "RelativeToolTip": "Raman1.0\\SpectrometerInterface.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAHcBAAAAAAAAAAAYwKsBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-17T21:12:20.081Z"
+              "WhenOpened": "2025-12-17T21:12:20.081Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "Form1.cs [\u8A2D\u8A08]",
               "DocumentMoniker": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\Form1.cs",
               "RelativeDocumentMoniker": "Raman1.0\\Form1.cs",
@@ -92,7 +124,7 @@
               "RelativeDocumentMoniker": "Raman1.0\\SpectrometerPanel.Designer.cs",
               "ToolTip": "C:\\Users\\Wilson\\Desktop\\Raman 3.0\\New-Raman\\Raman2.0\\Raman1.0\\SpectrometerPanel.Designer.cs",
               "RelativeToolTip": "Raman1.0\\SpectrometerPanel.Designer.cs",
-              "ViewState": "AgIAAAABAAAAAAAAAAAAwBABAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAAL0AAAAAAAAAAAAgwOkAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-15T12:47:39.606Z"
             }

@@ -1,20 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Raman1._0
 {
-    /// <summary>
-    /// SD1200-UVN 專用操作面板：
-    /// - 初始化 / 開啟第一台光譜儀
-    /// - 自動連續擷取光譜直到按下「停止」
-    /// - 即時在 PictureBox 畫出最新光譜
-    /// - 顯示當前光譜的最大強度與對應波長
-    /// - 暗背景扣除（可選）
-    /// - 自動積分時間控制（可選）
-    /// </summary>
     public partial class SpectrometerPanel : UserControl
     {
         private IntPtr _deviceHandle = IntPtr.Zero;
@@ -22,63 +14,110 @@ namespace Raman1._0
         private Thread _captureThread;
         private volatile bool _isCapturing;
 
-        // 擷取參數（注意：CaptureThread 會讀取這些值）
+        // 擷取參數
         private volatile uint _integrationTimeUs = 100_000; // 100 ms
-        private volatile uint _averageCount = 1;            // 先用 1 次平均
-        private volatile bool _autoIntegrationEnabled = false;
+        private uint _averageCount = 1;
 
-        // UI 更新用（避免 ValueChanged 事件被程式改值時反覆觸發）
-        private bool _suppressIntegrationValueChanged = false;
+        // integration time 範圍（由裝置讀回）
+        private uint _minIntegrationUs = 1_000;      // 保底：1ms
+        private uint _maxIntegrationUs = 1_000_000;  // 保底：1s
 
-        // 自動積分控制參數
-        private const int AUTO_IT_MAX_ITER = 8; // 每次畫面更新最多嘗試調整幾次
-        private const float TARGET_LOW_RATIO = 0.60f;
-        private const float TARGET_HIGH_RATIO = 0.85f;
+        // 自動積分 soft 上限（避免過長曝光導致 timeout 或 UI 看似卡住）
+        private const uint AUTO_SOFT_MAX_US = 2_000_000;
 
-        private static readonly string LastIntegrationFilePath =
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "last_integration_time_us.txt");
+        private bool _suppressNudValueChanged;
+        private volatile bool _autoIntegrationEnabled;
+
+        // 自動積分目標區間（16-bit）
+        private const float TARGET_LOW = 45000f;
+        private const float TARGET_HIGH = 55000f;
+        private const float TARGET_MID = (TARGET_LOW + TARGET_HIGH) * 0.5f;
+
+        // UI 更新頻率上限：避免 BeginInvoke 排隊過多（建議 10~20 FPS）
+        private const int UI_UPDATE_MIN_INTERVAL_MS = 50; // 20 FPS
 
         public SpectrometerPanel()
         {
             InitializeComponent();
-
-            // UI 初始狀態
-            _autoIntegrationEnabled = (chkAutoIntegration != null) && chkAutoIntegration.Checked;
-            if (nudIntegrationTime != null)
-                nudIntegrationTime.Enabled = !_autoIntegrationEnabled;
-
-            // 嘗試載入上次使用的積分時間
-            LoadLastIntegrationTime();
-            SyncIntegrationUi();
         }
 
-        #region 事件處理
-        private void btnInitialize_Click(object sender, EventArgs e)
+        #region 初始化 / 開始停止
+
+        private async void btnInitialize_Click(object sender, EventArgs e)
         {
-            if (_deviceHandle != IntPtr.Zero)
+            btnInitialize.Enabled = false;
+            try
             {
-                MessageBox.Show("光譜儀已初始化完成。若要重新初始化，請先重啟程式。");
-                return;
-            }
+                if (_isCapturing)
+                {
+                    MessageBox.Show("請先停止擷取再初始化。");
+                    return;
+                }
 
-            string error;
-            if (!SpectrometerInterface.Initialize(out _deviceHandle, out error))
+                if (_deviceHandle != IntPtr.Zero)
+                {
+                    SpectrometerInterface.Close(_deviceHandle);
+                    _deviceHandle = IntPtr.Zero;
+                }
+
+                labelDeviceInfo.Text = "初始化中...";
+
+                IntPtr handle = IntPtr.Zero;
+                string error = string.Empty;
+
+                bool ok = await Task.Run(() =>
+                {
+                    return SpectrometerInterface.Initialize(out handle, out error);
+                });
+
+                if (!ok || handle == IntPtr.Zero)
+                {
+                    MessageBox.Show("光譜儀初始化失敗：\n" + error, "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    labelDeviceInfo.Text = "裝置尚未初始化...";
+                    return;
+                }
+
+                _deviceHandle = handle;
+                _intensities = new float[SpectrometerInterface.FrameSize];
+
+                // 讀取 integration time 範圍（us）
+                string rangeErr;
+                if (SpectrometerInterface.TryGetIntegrationTimeRangeUs(_deviceHandle, out uint minUs, out uint maxUs, out rangeErr))
+                {
+                    _minIntegrationUs = minUs;
+                    _maxIntegrationUs = maxUs;
+                }
+                else
+                {
+                    labelDeviceInfo.Text = "初始化完成，但取得積分範圍失敗：" + rangeErr;
+                }
+
+                _integrationTimeUs = ClampU(_integrationTimeUs, _minIntegrationUs, _maxIntegrationUs);
+
+                if (nudIntegrationTimeUs != null)
+                {
+                    _suppressNudValueChanged = true;
+                    try
+                    {
+                        nudIntegrationTimeUs.Minimum = (decimal)_minIntegrationUs;
+                        nudIntegrationTimeUs.Maximum = (decimal)_maxIntegrationUs;
+                        nudIntegrationTimeUs.Value = (decimal)_integrationTimeUs;
+                    }
+                    finally
+                    {
+                        _suppressNudValueChanged = false;
+                    }
+                }
+
+                labelDeviceInfo.Text = $"裝置已就緒，點數: {SpectrometerInterface.FrameSize}，積分範圍: {_minIntegrationUs}~{_maxIntegrationUs} µs";
+                btnStart.Enabled = true;
+                btnStop.Enabled = false;
+            }
+            finally
             {
-                MessageBox.Show("光譜儀初始化失敗：\n" + error, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                _deviceHandle = IntPtr.Zero;
-                return;
+                btnInitialize.Enabled = true;
             }
-
-            // 配置強度緩衝陣列
-            _intensities = new float[SpectrometerInterface.FrameSize];
-
-            labelDeviceInfo.Text = $"裝置已就緒，點數: {SpectrometerInterface.FrameSize}";
-            btnStart.Enabled = true;
-            btnStop.Enabled = false;
-
-            // 顯示目前積分時間
-            SyncIntegrationUi();
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -88,8 +127,7 @@ namespace Raman1._0
                 MessageBox.Show("請先執行初始化。");
                 return;
             }
-            if (_isCapturing)
-                return;
+            if (_isCapturing) return;
 
             _isCapturing = true;
             btnStart.Enabled = false;
@@ -102,496 +140,240 @@ namespace Raman1._0
 
         private void btnStop_Click(object sender, EventArgs e)
         {
-            StopCapture();
+            StopCapture(waitForCurrentAcquire: true);
         }
 
         private void SpectrometerPanel_Disposed(object sender, EventArgs e)
         {
-            StopCapture();
-            SpectrometerInterface.Close(_deviceHandle);
-            _deviceHandle = IntPtr.Zero;
+            StopCapture(waitForCurrentAcquire: true);
 
-            SaveLastIntegrationTime();
+            if (_deviceHandle != IntPtr.Zero)
+            {
+                SpectrometerInterface.Close(_deviceHandle);
+                _deviceHandle = IntPtr.Zero;
+            }
         }
+
+        #endregion
+
+        #region 自動/手動積分 UI
 
         private void chkAutoIntegration_CheckedChanged(object sender, EventArgs e)
         {
-            _autoIntegrationEnabled = chkAutoIntegration.Checked;
-
-            // 勾選自動時：禁用手動輸入（避免人為與自動互相打架）
-            if (nudIntegrationTime != null)
-                nudIntegrationTime.Enabled = !_autoIntegrationEnabled;
-
-            // 切回手動時，立刻用目前欄位的值作為積分時間（若欄位存在）
-            if (!_autoIntegrationEnabled && nudIntegrationTime != null)
-            {
-                _integrationTimeUs = (uint)nudIntegrationTime.Value;
-            }
-
-            SyncIntegrationUi();
+            _autoIntegrationEnabled = (chkAutoIntegration != null && chkAutoIntegration.Checked);
         }
 
-        private void nudIntegrationTime_ValueChanged(object sender, EventArgs e)
+        // Designer 綁定的方法名必須存在
+        private void nudIntegrationTimeUs_ValueChanged(object sender, EventArgs e)
         {
-            if (_suppressIntegrationValueChanged)
-                return;
+            if (_suppressNudValueChanged) return;
+            if (nudIntegrationTimeUs == null) return;
 
-            // 只有在「自動積分」關閉時才採用手動值
-            if (!_autoIntegrationEnabled)
+            uint v = (uint)nudIntegrationTimeUs.Value;
+            v = ClampU(v, _minIntegrationUs, _maxIntegrationUs);
+            _integrationTimeUs = v;
+
+            if ((uint)nudIntegrationTimeUs.Value != v)
             {
-                _integrationTimeUs = (uint)nudIntegrationTime.Value;
-                SyncIntegrationUi();
+                _suppressNudValueChanged = true;
+                try { nudIntegrationTimeUs.Value = (decimal)v; }
+                finally { _suppressNudValueChanged = false; }
             }
         }
+
         #endregion
 
-        #region 擷取與繪圖
+        #region 擷取迴圈（已加入節奏控制，避免過快輪詢造成逾時）
+
         private void CaptureLoop()
         {
+            bool releasedOnError = false;
+            var sw = Stopwatch.StartNew();
+            long lastUiUpdateMs = 0;
+
             try
             {
                 while (_isCapturing)
                 {
-                    if (_intensities == null || SpectrometerInterface.FrameSize <= 0)
-                        break;
+                    if (_deviceHandle == IntPtr.Zero) break;
+                    if (_intensities == null || SpectrometerInterface.FrameSize <= 0) break;
 
-                    float rawMaxIntensity;
-                    float rawMaxWavelength;
-                    bool saturated;
-                    uint usedIntegrationUs;
+                    long loopStartMs = sw.ElapsedMilliseconds;
+                    uint usedIntegrationUs = ClampU(_integrationTimeUs, _minIntegrationUs, _maxIntegrationUs);
+
+                    float rawMax;
+                    float rawMaxWl;
                     string error;
 
-                    bool ok = AcquireSpectrumWithAutoIntegration(
+                    bool ok = SpectrometerInterface.AcquireSpectrum(
+                        _deviceHandle,
+                        usedIntegrationUs,
+                        _averageCount,
                         _intensities,
-                        out rawMaxIntensity,
-                        out rawMaxWavelength,
-                        out saturated,
-                        out usedIntegrationUs,
+                        out rawMax,
+                        out rawMaxWl,
                         out error);
 
                     if (!ok)
                     {
-                        this.BeginInvoke(new Action(() =>
+                        _isCapturing = false;
+
+                        // 釋放 handle，避免裝置停在 busy 狀態
+                        try { SpectrometerInterface.Close(_deviceHandle); } catch { }
+                        _deviceHandle = IntPtr.Zero;
+                        releasedOnError = true;
+
+                        BeginInvoke(new Action(() =>
                         {
+                            btnStart.Enabled = false;
+                            btnStop.Enabled = false;
+                            labelDeviceInfo.Text = "擷取失敗，裝置已釋放。請重新初始化；若仍失敗請拔插 USB。";
                             MessageBox.Show("擷取光譜失敗：\n" + error, "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }));
                         break;
                     }
 
-                    // 為避免 UI 與背景執行緒同時使用同一個陣列，複製一份
-                    float[] intensityCopy = new float[_intensities.Length];
-                    Array.Copy(_intensities, intensityCopy, _intensities.Length);
-
-                    this.BeginInvoke(new Action(() =>
+                    // 自動積分（用 rawMax 判斷）
+                    if (_autoIntegrationEnabled)
                     {
-                        // 顯示光譜（若有背景扣除，會在 UpdateSpectrumDisplay 內處理）
-                        UpdateSpectrumDisplay(intensityCopy, rawMaxIntensity, rawMaxWavelength);
+                        uint newUs = ComputeAutoIntegrationUs(usedIntegrationUs, rawMax);
+                        if (newUs != usedIntegrationUs)
+                        {
+                            _integrationTimeUs = newUs;
 
-                        // 更新積分時間顯示
-                        UpdateIntegrationStatusUi(usedIntegrationUs, saturated);
-                    }));
+                            if (nudIntegrationTimeUs != null)
+                            {
+                                BeginInvoke(new Action(() =>
+                                {
+                                    _suppressNudValueChanged = true;
+                                    try
+                                    {
+                                        uint clamped = ClampU(newUs, _minIntegrationUs, _maxIntegrationUs);
+                                        nudIntegrationTimeUs.Value = (decimal)clamped;
+                                    }
+                                    finally
+                                    {
+                                        _suppressNudValueChanged = false;
+                                    }
+                                }));
+                            }
+                        }
+                    }
 
-                    // 避免 CPU 過高，可視情況調整
-                    Thread.Sleep(10);
+                    // UI 更新頻率限制（避免 BeginInvoke 排隊）
+                    long nowMs = sw.ElapsedMilliseconds;
+                    if (nowMs - lastUiUpdateMs >= UI_UPDATE_MIN_INTERVAL_MS)
+                    {
+                        lastUiUpdateMs = nowMs;
+
+                        float[] intensityCopy = new float[_intensities.Length];
+                        Array.Copy(_intensities, intensityCopy, _intensities.Length);
+
+                        BeginInvoke(new Action(() =>
+                        {
+                            UpdateSpectrumDisplay(intensityCopy, rawMax, rawMaxWl);
+                        }));
+                    }
+
+                    // 控制抓取節奏，避免過快導致裝置狀態機逾時
+                    int desiredPeriodMs = (int)Math.Max(10, (usedIntegrationUs / 1000) + 5);
+                    int elapsedThisLoopMs = (int)(sw.ElapsedMilliseconds - loopStartMs);
+                    int sleepMs = desiredPeriodMs - elapsedThisLoopMs;
+                    if (sleepMs > 0)
+                        Thread.Sleep(sleepMs);
                 }
             }
             finally
             {
-                this.BeginInvoke(new Action(() =>
+                BeginInvoke(new Action(() =>
                 {
-                    btnStart.Enabled = true;
                     btnStop.Enabled = false;
+                    btnStart.Enabled = (_deviceHandle != IntPtr.Zero) && !releasedOnError;
                 }));
                 _isCapturing = false;
             }
         }
 
-        private void StopCapture()
+        private void StopCapture(bool waitForCurrentAcquire)
         {
             _isCapturing = false;
+
             if (_captureThread != null && _captureThread.IsAlive)
             {
                 try
                 {
-                    _captureThread.Join(500);
+                    if (waitForCurrentAcquire)
+                    {
+                        uint us = ClampU(_integrationTimeUs, _minIntegrationUs, _maxIntegrationUs);
+                        int waitMs = (int)Math.Min(15000, (us / 1000) + 2000);
+                        _captureThread.Join(waitMs);
+                    }
+                    else
+                    {
+                        _captureThread.Join(200);
+                    }
                 }
                 catch { }
             }
-            btnStart.Enabled = true;
+
+            btnStart.Enabled = (_deviceHandle != IntPtr.Zero);
             btnStop.Enabled = false;
-
-            SaveLastIntegrationTime();
         }
 
-        /// <summary>
-        /// 核心：先擷取 raw 光譜，再依照 raw 最大值做「自動積分時間控制」。
-        /// 注意：自動判斷一定用 raw（未扣背景）避免誤判。
-        /// </summary>
-        private bool AcquireSpectrumWithAutoIntegration(
-            float[] buffer,
-            out float rawMaxIntensity,
-            out float rawMaxWavelength,
-            out bool saturated,
-            out uint usedIntegrationTimeUs,
-            out string error)
+        private uint ComputeAutoIntegrationUs(uint currentUs, float rawMax)
         {
-            rawMaxIntensity = 0f;
-            rawMaxWavelength = 0f;
-            saturated = false;
-            usedIntegrationTimeUs = _integrationTimeUs;
-            error = string.Empty;
+            if (rawMax < 1f) rawMax = 1f;
 
-            if (_deviceHandle == IntPtr.Zero)
+            if (rawMax >= TARGET_LOW && rawMax <= TARGET_HIGH)
+                return currentUs;
+
+            float ratio;
+            if (rawMax > TARGET_HIGH)
             {
-                error = "裝置尚未初始化。";
-                return false;
+                ratio = TARGET_MID / rawMax; // < 1
+                ratio = ClampF(ratio, 0.2f, 0.85f);
+            }
+            else
+            {
+                ratio = TARGET_MID / rawMax; // > 1
+                ratio = ClampF(ratio, 1.15f, 5.0f);
             }
 
-            uint minUs = SpectrometerInterface.IntegrationTimeMinUs;
-            uint maxUs = SpectrometerInterface.IntegrationTimeMaxUs;
+            uint newUs = (uint)Math.Round(currentUs * ratio);
+            newUs = ClampU(newUs, _minIntegrationUs, _maxIntegrationUs);
 
-            float adcMax = SpectrometerInterface.AdcMaxValue;
-            float targetLow = adcMax * TARGET_LOW_RATIO;
-            float targetHigh = adcMax * TARGET_HIGH_RATIO;
+            uint softMax = Math.Min(_maxIntegrationUs, AUTO_SOFT_MAX_US);
+            if (newUs > softMax) newUs = softMax;
 
-            // 使用當前積分時間作為起始值
-            uint it = usedIntegrationTimeUs;
+            uint diff = (newUs > currentUs) ? (newUs - currentUs) : (currentUs - newUs);
+            uint thresh = Math.Max(50u, currentUs / 50u);
+            if (diff < thresh)
+                return currentUs;
 
-            for (int iter = 0; iter < AUTO_IT_MAX_ITER; iter++)
-            {
-                bool ok = SpectrometerInterface.AcquireSpectrum(
-                    _deviceHandle,
-                    it,
-                    _averageCount,
-                    buffer,
-                    out rawMaxIntensity,
-                    out rawMaxWavelength,
-                    out error);
-
-                if (!ok)
-                    return false;
-
-                saturated = (rawMaxIntensity >= adcMax);
-
-                // 若未啟用自動積分，擷取一次就結束
-                if (!_autoIntegrationEnabled)
-                    break;
-
-                // 需要縮短（太亮或飽和）
-                if (rawMaxIntensity > targetHigh && it > minUs)
-                {
-                    uint candidate = (uint)Math.Round(it * 0.5);
-                    if (candidate < minUs) candidate = minUs;
-                    uint newIt = candidate;
-
-                    if (newIt == it)
-                        break;
-
-                    it = newIt;
-                    continue;
-                }
-
-                // 需要拉長（太暗）
-                if (rawMaxIntensity < targetLow && it < maxUs)
-                {
-                    uint candidate = (uint)Math.Round(it * 1.5);
-                    if (candidate > maxUs) candidate = maxUs;
-                    uint newIt = candidate;
-
-                    if (newIt == it)
-                        break;
-
-                    it = newIt;
-                    continue;
-                }
-
-                // 在區間內，結束
-                break;
-            }
-
-            usedIntegrationTimeUs = it;
-            _integrationTimeUs = it; // 更新全域狀態，讓下一輪從此值開始
-
-            return true;
+            return newUs;
         }
 
-        private void UpdateIntegrationStatusUi(uint integrationTimeUs, bool saturated)
+        private static float ClampF(float v, float lo, float hi)
         {
-            // 顯示當前積分時間（同時把 NumericUpDown 同步到實際值，方便你切回手動時接續）
-            if (labelCurrentIntegrationTimeValue != null)
-            {
-                double ms = integrationTimeUs / 1000.0;
-                labelCurrentIntegrationTimeValue.Text = $"{integrationTimeUs} µs ({ms:F1} ms)";
-            }
-
-            if (labelSaturated != null)
-                labelSaturated.Visible = saturated;
-
-            // 若目前是自動模式，nudIntegrationTime 被禁用，但仍可同步顯示最新值
-            if (nudIntegrationTime != null)
-            {
-                try
-                {
-                    _suppressIntegrationValueChanged = true;
-
-                    decimal v = integrationTimeUs;
-                    if (v < nudIntegrationTime.Minimum) v = nudIntegrationTime.Minimum;
-                    if (v > nudIntegrationTime.Maximum) v = nudIntegrationTime.Maximum;
-                    nudIntegrationTime.Value = v;
-                }
-                finally
-                {
-                    _suppressIntegrationValueChanged = false;
-                }
-            }
+            if (v < lo) return lo;
+            if (v > hi) return hi;
+            return v;
         }
 
-        private void SyncIntegrationUi()
+        private static uint ClampU(uint v, uint lo, uint hi)
         {
-            if (labelCurrentIntegrationTimeValue != null)
-            {
-                double ms = _integrationTimeUs / 1000.0;
-                labelCurrentIntegrationTimeValue.Text = $"{_integrationTimeUs} µs ({ms:F1} ms)";
-            }
-
-            if (labelSaturated != null)
-                labelSaturated.Visible = false;
-
-            if (nudIntegrationTime != null)
-            {
-                try
-                {
-                    _suppressIntegrationValueChanged = true;
-
-                    decimal v = _integrationTimeUs;
-                    if (v < nudIntegrationTime.Minimum) v = nudIntegrationTime.Minimum;
-                    if (v > nudIntegrationTime.Maximum) v = nudIntegrationTime.Maximum;
-                    nudIntegrationTime.Value = v;
-                }
-                finally
-                {
-                    _suppressIntegrationValueChanged = false;
-                }
-            }
+            if (v < lo) return lo;
+            if (v > hi) return hi;
+            return v;
         }
 
-        private void LoadLastIntegrationTime()
-        {
-            try
-            {
-                if (!File.Exists(LastIntegrationFilePath))
-                    return;
+        #endregion
 
-                string s = File.ReadAllText(LastIntegrationFilePath).Trim();
-                uint last;
-                if (uint.TryParse(s, out last))
-                {
-                    // 夾制在範圍內
-                    if (last < SpectrometerInterface.IntegrationTimeMinUs) last = SpectrometerInterface.IntegrationTimeMinUs;
-                    if (last > SpectrometerInterface.IntegrationTimeMaxUs) last = SpectrometerInterface.IntegrationTimeMaxUs;
-                    _integrationTimeUs = last;
-                }
-            }
-            catch
-            {
-                // 讀取失敗不影響主流程
-            }
-        }
-
-        private void SaveLastIntegrationTime()
-        {
-            try
-            {
-                File.WriteAllText(LastIntegrationFilePath, _integrationTimeUs.ToString());
-            }
-            catch
-            {
-                // 儲存失敗不影響主流程
-            }
-        }
-
-        /// <summary>
-        /// 在 PictureBox 中繪製光譜並更新最大值資訊
-        /// </summary>
-        private void UpdateSpectrumDisplay(float[] intensities, float maxIntensity, float maxWavelength)
-        {
-            if (pictureSpectrum.Width <= 0 || pictureSpectrum.Height <= 0)
-                return;
-
-            int width = pictureSpectrum.Width;
-            int height = pictureSpectrum.Height;
-
-            Bitmap bmp = new Bitmap(width, height);
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
-                g.Clear(Color.Black);
-
-                if (intensities != null && intensities.Length > 1)
-                {
-                    int n = intensities.Length;
-
-                    // 留出顯示刻度文字的邊界
-                    int left = 60;
-                    int right = 15;
-                    int top = 15;
-                    int bottom = 40;
-
-                    // ===== 1) 暗背景扣除（若勾選且背景存在且長度相符）=====
-                    bool doDarkSubtract =
-                        (chkSubtractBackground != null && chkSubtractBackground.Checked) &&
-                        (SpectrometerInterface.DarkBackground != null) &&
-                        (SpectrometerInterface.DarkBackground.Length == n);
-
-                    float localMax = float.MinValue;
-                    int maxIndex = 0;
-
-                    if (doDarkSubtract)
-                    {
-                        for (int i = 0; i < n; i++)
-                        {
-                            float v = intensities[i] - SpectrometerInterface.DarkBackground[i];
-                            if (v < 0) v = 0;
-                            intensities[i] = v;
-
-                            if (v > localMax)
-                            {
-                                localMax = v;
-                                maxIndex = i;
-                            }
-                        }
-
-                        if (localMax < 0) localMax = 0;
-                        maxIntensity = localMax;
-                        if (SpectrometerInterface.Wavelengths != null &&
-                            SpectrometerInterface.Wavelengths.Length > maxIndex)
-                        {
-                            maxWavelength = SpectrometerInterface.Wavelengths[maxIndex];
-                        }
-                        else
-                        {
-                            maxWavelength = 0f;
-                        }
-                    }
-
-                    // ===== 2) 計算繪圖比例 =====
-                    float globalMax = (maxIntensity > 0) ? maxIntensity : 1f;
-
-                    float plotWidth = (width - left - right);
-                    float plotHeight = (height - top - bottom);
-                    if (plotWidth <= 1 || plotHeight <= 1) return;
-
-                    float xScale = plotWidth / (n - 1);
-                    float yScale = plotHeight / globalMax;
-
-                    // ===== 3) 畫光譜曲線 =====
-                    PointF prev = PointF.Empty;
-                    bool hasPrev = false;
-
-                    using (Pen pen = new Pen(Color.Lime, 1f))
-                    {
-                        for (int i = 0; i < n; i++)
-                        {
-                            float x = left + i * xScale;
-                            float y = top + (plotHeight - intensities[i] * yScale);
-
-                            if (y < top) y = top;
-                            if (y > top + plotHeight) y = top + plotHeight;
-
-                            PointF pt = new PointF(x, y);
-                            if (hasPrev) g.DrawLine(pen, prev, pt);
-                            prev = pt;
-                            hasPrev = true;
-                        }
-                    }
-
-                    // ===== 4) 畫座標軸 =====
-                    using (Pen axisPen = new Pen(Color.White, 1f))
-                    {
-                        // X 軸
-                        g.DrawLine(axisPen, left, top + plotHeight, left + plotWidth, top + plotHeight);
-                        // Y 軸
-                        g.DrawLine(axisPen, left, top + plotHeight, left, top);
-                    }
-
-                    // ===== 5) 刻度 + 單位標註 =====
-                    using (Font f = new Font("Arial", 9))
-                    using (Brush br = new SolidBrush(Color.White))
-                    using (Pen tickPen = new Pen(Color.White, 1f))
-                    {
-                        // X 軸：用 Wavelengths 標 min/mid/max（若可用）
-                        float wlMin = 0, wlMid = 0, wlMax = 0;
-                        bool hasWL = SpectrometerInterface.Wavelengths != null &&
-                                     SpectrometerInterface.Wavelengths.Length == n;
-
-                        if (hasWL)
-                        {
-                            wlMin = SpectrometerInterface.Wavelengths[0];
-                            wlMax = SpectrometerInterface.Wavelengths[n - 1];
-                            wlMid = SpectrometerInterface.Wavelengths[(n - 1) / 2];
-                        }
-
-                        // X ticks at left/middle/right
-                        float x0 = left;
-                        float x1 = left + plotWidth * 0.5f;
-                        float x2 = left + plotWidth;
-
-                        float yAxis = top + plotHeight;
-
-                        // tick lines
-                        g.DrawLine(tickPen, x0, yAxis, x0, yAxis + 5);
-                        g.DrawLine(tickPen, x1, yAxis, x1, yAxis + 5);
-                        g.DrawLine(tickPen, x2, yAxis, x2, yAxis + 5);
-
-                        if (hasWL)
-                        {
-                            g.DrawString(wlMin.ToString("F0"), f, br, x0 - 10, yAxis + 8);
-                            g.DrawString(wlMid.ToString("F0"), f, br, x1 - 10, yAxis + 8);
-                            g.DrawString(wlMax.ToString("F0"), f, br, x2 - 10, yAxis + 8);
-                        }
-
-                        // Y 軸：0 / max/2 / max
-                        float y0 = top + plotHeight;
-                        float y1 = top + plotHeight * 0.5f;
-                        float y2 = top;
-
-                        g.DrawLine(tickPen, left - 5, y0, left, y0);
-                        g.DrawLine(tickPen, left - 5, y1, left, y1);
-                        g.DrawLine(tickPen, left - 5, y2, left, y2);
-
-                        g.DrawString("0", f, br, 5, y0 - 8);
-                        g.DrawString((globalMax * 0.5f).ToString("F0"), f, br, 5, y1 - 8);
-                        g.DrawString(globalMax.ToString("F0"), f, br, 5, y2 - 8);
-
-                        // Axis labels
-                        string xLabel = "波長 (nm)";
-                        SizeF xSize = g.MeasureString(xLabel, f);
-                        g.DrawString(xLabel, f, br, left + plotWidth / 2f - xSize.Width / 2f, height - 20);
-
-                        string yLabel = "強度 (a.u.)";
-                        var state = g.Save();
-                        g.TranslateTransform(18f, top + plotHeight / 2f);
-                        g.RotateTransform(-90f);
-                        SizeF ySize = g.MeasureString(yLabel, f);
-                        g.DrawString(yLabel, f, br, -ySize.Width / 2f, -ySize.Height / 2f);
-                        g.Restore(state);
-                    }
-                }
-            }
-
-            if (pictureSpectrum.Image != null)
-            {
-                pictureSpectrum.Image.Dispose();
-            }
-            pictureSpectrum.Image = bmp;
-
-            labelMaxIntensityValue.Text = maxIntensity.ToString("F0");
-            labelMaxWavelengthValue.Text = maxWavelength.ToString("F1") + " nm";
-        }
+        #region 暗背景（沿用目前流程）
 
         private void btnSaveDarkBackground_Click(object sender, EventArgs e)
         {
-            // 確認裝置已初始化且未在擷取中
             if (_deviceHandle == IntPtr.Zero)
             {
                 MessageBox.Show("請先執行初始化。");
@@ -603,20 +385,21 @@ namespace Raman1._0
                 return;
             }
 
-            // 從光譜儀擷取一次光譜作為暗背景
+            uint usedIntegrationUs = ClampU(_integrationTimeUs, _minIntegrationUs, _maxIntegrationUs);
+
             float[] darkData = new float[SpectrometerInterface.FrameSize];
             string error;
             bool ok = SpectrometerInterface.AcquireSpectrum(
-                         _deviceHandle, _integrationTimeUs, _averageCount,
-                         darkData, out _, out _, out error);
+                _deviceHandle, usedIntegrationUs, _averageCount,
+                darkData, out _, out _, out error);
+
             if (!ok)
             {
                 MessageBox.Show("擷取暗背景失敗：\n" + error, "Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // 將擷取到的暗背景光譜儲存到記憶體並寫入檔案
             string setErr;
             if (!SpectrometerInterface.SetDarkBackground(darkData, out setErr))
             {
@@ -636,16 +419,161 @@ namespace Raman1._0
 
         private void chkSubtractBackground_CheckedChanged(object sender, EventArgs e)
         {
-            // 啟用背景扣除時，若尚未設定暗背景則給予提醒
-            if (chkSubtractBackground.Checked)
+            if (chkSubtractBackground != null && chkSubtractBackground.Checked)
             {
                 if (SpectrometerInterface.DarkBackground == null)
                 {
                     MessageBox.Show("尚未設定暗背景，無法執行背景扣除！", "提醒",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     chkSubtractBackground.Checked = false;
                 }
             }
+        }
+
+        #endregion
+
+        #region 繪圖（含 X/Y 軸刻度與單位）
+
+        private void UpdateSpectrumDisplay(float[] intensities, float maxIntensity, float maxWavelength)
+        {
+            if (pictureSpectrum.Width <= 0 || pictureSpectrum.Height <= 0)
+                return;
+
+            int width = pictureSpectrum.Width;
+            int height = pictureSpectrum.Height;
+            Bitmap bmp = new Bitmap(width, height);
+
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.Clear(Color.Black);
+
+                if (intensities != null && intensities.Length > 1)
+                {
+                    int n = intensities.Length;
+                    int left = 60, right = 15, top = 15, bottom = 40;
+
+                    bool doDarkSubtract =
+                        (chkSubtractBackground != null && chkSubtractBackground.Checked) &&
+                        (SpectrometerInterface.DarkBackground != null) &&
+                        (SpectrometerInterface.DarkBackground.Length == n);
+
+                    float localMax = float.MinValue;
+                    int maxIndex = 0;
+
+                    if (doDarkSubtract)
+                    {
+                        for (int i = 0; i < n; i++)
+                        {
+                            float v = intensities[i] - SpectrometerInterface.DarkBackground[i];
+                            if (v < 0) v = 0;
+                            intensities[i] = v;
+                            if (v > localMax)
+                            {
+                                localMax = v;
+                                maxIndex = i;
+                            }
+                        }
+
+                        if (localMax < 0) localMax = 0;
+                        maxIntensity = localMax;
+
+                        if (SpectrometerInterface.Wavelengths != null &&
+                            SpectrometerInterface.Wavelengths.Length > maxIndex)
+                        {
+                            maxWavelength = SpectrometerInterface.Wavelengths[maxIndex];
+                        }
+                        else
+                        {
+                            maxWavelength = 0f;
+                        }
+                    }
+
+                    float globalMax = (maxIntensity > 0) ? maxIntensity : 1f;
+                    float plotWidth = (width - left - right);
+                    float plotHeight = (height - top - bottom);
+                    if (plotWidth <= 1 || plotHeight <= 1) return;
+
+                    float xScale = plotWidth / (n - 1);
+                    float yScale = plotHeight / globalMax;
+
+                    PointF prev = PointF.Empty;
+                    bool hasPrev = false;
+                    using (Pen pen = new Pen(Color.Lime, 1f))
+                    {
+                        for (int i = 0; i < n; i++)
+                        {
+                            float x = left + i * xScale;
+                            float y = top + (plotHeight - intensities[i] * yScale);
+                            if (y < top) y = top;
+                            if (y > top + plotHeight) y = top + plotHeight;
+
+                            PointF pt = new PointF(x, y);
+                            if (hasPrev) g.DrawLine(pen, prev, pt);
+                            prev = pt;
+                            hasPrev = true;
+                        }
+                    }
+
+                    using (Pen axisPen = new Pen(Color.White, 1f))
+                    {
+                        g.DrawLine(axisPen, left, top + plotHeight, left + plotWidth, top + plotHeight);
+                        g.DrawLine(axisPen, left, top + plotHeight, left, top);
+                    }
+
+                    using (Font f = new Font("Arial", 9))
+                    using (Brush br = new SolidBrush(Color.White))
+                    using (Pen tickPen = new Pen(Color.White, 1f))
+                    {
+                        float wlMin = 0, wlMid = 0, wlMax = 0;
+                        bool hasWL = SpectrometerInterface.Wavelengths != null &&
+                                     SpectrometerInterface.Wavelengths.Length == n;
+                        if (hasWL)
+                        {
+                            wlMin = SpectrometerInterface.Wavelengths[0];
+                            wlMax = SpectrometerInterface.Wavelengths[n - 1];
+                            wlMid = SpectrometerInterface.Wavelengths[(n - 1) / 2];
+                        }
+
+                        float x0 = left;
+                        float x1 = left + plotWidth * 0.5f;
+                        float x2 = left + plotWidth;
+                        float yAxis = top + plotHeight;
+
+                        g.DrawLine(tickPen, x0, yAxis, x0, yAxis + 5);
+                        g.DrawLine(tickPen, x1, yAxis, x1, yAxis + 5);
+                        g.DrawLine(tickPen, x2, yAxis, x2, yAxis + 5);
+
+                        if (hasWL)
+                        {
+                            g.DrawString($"{wlMin:F0} nm", f, br, x0 - 10, yAxis + 8);
+                            g.DrawString($"{wlMid:F0} nm", f, br, x1 - 12, yAxis + 8);
+                            g.DrawString($"{wlMax:F0} nm", f, br, x2 - 20, yAxis + 8);
+                        }
+                    }
+
+                    using (Font f = new Font("Arial", 9))
+                    using (Brush br = new SolidBrush(Color.White))
+                    using (Pen tickPen = new Pen(Color.White, 1f))
+                    {
+                        // Y 軸刻度
+                        for (int i = 0; i <= 5; i++)
+                        {
+                            float y = top + plotHeight - i * (plotHeight / 5);
+                            g.DrawLine(tickPen, left - 5, y, left, y);
+                            float value = globalMax * i / 5f;
+                            g.DrawString($"{value:F0}", f, br, left - 55, y - 8);
+                        }
+                        // 標記最大值位置
+                        if (maxWavelength > 0)
+                        {
+                            g.DrawString($"Peak λ: {maxWavelength:F1} nm", f, br, left + 5, top - 15);
+                            g.DrawString($"Intensity: {maxIntensity:F0}", f, br, left + 5, top - 30);
+                        }
+                    }
+                }
+            }
+
+            pictureSpectrum.Image = bmp;
         }
 
         #endregion
