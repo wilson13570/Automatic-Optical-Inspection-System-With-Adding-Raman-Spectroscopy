@@ -10,6 +10,7 @@ namespace Raman1._0
     public partial class SpectrometerPanel : UserControl
     {
         private IntPtr _deviceHandle = IntPtr.Zero;
+
         private float[] _intensities;
         private Thread _captureThread;
         private volatile bool _isCapturing;
@@ -22,7 +23,7 @@ namespace Raman1._0
         private uint _minIntegrationUs = 1_000;      // 保底：1ms
         private uint _maxIntegrationUs = 1_000_000;  // 保底：1s
 
-        // 自動積分 soft 上限（避免過長曝光導致 timeout 或 UI 看似卡住）
+        // 自動積分 soft 上限（避免過長曝光導致看似卡住）
         private const uint AUTO_SOFT_MAX_US = 2_000_000;
 
         private bool _suppressNudValueChanged;
@@ -183,56 +184,105 @@ namespace Raman1._0
 
         #endregion
 
-        #region 擷取迴圈（已加入節奏控制，避免過快輪詢造成逾時）
+        #region 擷取迴圈（TIMEOUT 自動恢復 + 不彈錯誤視窗打斷）
 
         private void CaptureLoop()
         {
-            bool releasedOnError = false;
             var sw = Stopwatch.StartNew();
             long lastUiUpdateMs = 0;
+
+            int consecutiveRecoverFail = 0;
 
             try
             {
                 while (_isCapturing)
                 {
                     if (_deviceHandle == IntPtr.Zero) break;
-                    if (_intensities == null || SpectrometerInterface.FrameSize <= 0) break;
+
+                    // 若 framesize 在恢復後有變動，確保 buffer 長度一致
+                    if (_intensities == null || _intensities.Length != SpectrometerInterface.FrameSize)
+                        _intensities = new float[SpectrometerInterface.FrameSize];
 
                     long loopStartMs = sw.ElapsedMilliseconds;
+
                     uint usedIntegrationUs = ClampU(_integrationTimeUs, _minIntegrationUs, _maxIntegrationUs);
 
                     float rawMax;
                     float rawMaxWl;
+                    uint status;
                     string error;
 
+                    // 連續擷取：預設用 Acquire（不清 buffer）
                     bool ok = SpectrometerInterface.AcquireSpectrum(
-                        _deviceHandle,
+                        ref _deviceHandle,
                         usedIntegrationUs,
                         _averageCount,
                         _intensities,
+                        oneshot: false,
                         out rawMax,
                         out rawMaxWl,
+                        out status,
                         out error);
 
                     if (!ok)
                     {
-                        _isCapturing = false;
+                        // 可恢復的錯誤：TIMEOUT / PROTOCOL / HANDLE_INVALID
+                        if (SpectrometerInterface.IsTimeoutStatus(status) ||
+                            SpectrometerInterface.IsProtocolErrorStatus(status) ||
+                            SpectrometerInterface.IsHandleInvalidStatus(status))
+                        {
+                            consecutiveRecoverFail++;
 
-                        // 釋放 handle，避免裝置停在 busy 狀態
-                        try { SpectrometerInterface.Close(_deviceHandle); } catch { }
-                        _deviceHandle = IntPtr.Zero;
-                        releasedOnError = true;
+                            BeginInvoke(new Action(() =>
+                            {
+                                labelDeviceInfo.Text = $"擷取異常：{SpectrometerInterface.FormatStatus(status)}，嘗試自動恢復中...({consecutiveRecoverFail})";
+                            }));
+
+                            // 多次仍失敗才停止並提示
+                            if (consecutiveRecoverFail >= 3)
+                            {
+                                _isCapturing = false;
+
+                                BeginInvoke(new Action(() =>
+                                {
+                                    btnStart.Enabled = (_deviceHandle != IntPtr.Zero);
+                                    btnStop.Enabled = false;
+
+                                    MessageBox.Show(
+                                        "連續發生逾時/通訊異常，已嘗試自動恢復但仍失敗。\n\n" +
+                                        "建議處置：\n" +
+                                        "1) 按「初始化裝置」重新連線\n" +
+                                        "2) 若仍失敗，拔插 USB 後再初始化\n\n" +
+                                        "最後錯誤：\n" + error,
+                                        "Error",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Error);
+                                }));
+                                break;
+                            }
+
+                            // 稍微緩衝一下再繼續 loop（避免立刻重打）
+                            Thread.Sleep(80);
+                            continue;
+                        }
+
+                        // 非可恢復錯誤：停止並提示（這類錯誤通常是參數/記憶體/校準等）
+                        _isCapturing = false;
 
                         BeginInvoke(new Action(() =>
                         {
-                            btnStart.Enabled = false;
+                            btnStart.Enabled = (_deviceHandle != IntPtr.Zero);
                             btnStop.Enabled = false;
-                            labelDeviceInfo.Text = "擷取失敗，裝置已釋放。請重新初始化；若仍失敗請拔插 USB。";
+                            labelDeviceInfo.Text = "擷取失敗（非可恢復錯誤）。請重新初始化；若仍失敗請拔插 USB。";
+
                             MessageBox.Show("擷取光譜失敗：\n" + error, "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }));
                         break;
                     }
+
+                    // 成功就把連續失敗計數歸零
+                    consecutiveRecoverFail = 0;
 
                     // 自動積分（用 rawMax 判斷）
                     if (_autoIntegrationEnabled)
@@ -247,51 +297,62 @@ namespace Raman1._0
                                 BeginInvoke(new Action(() =>
                                 {
                                     _suppressNudValueChanged = true;
-                                    try
-                                    {
-                                        uint clamped = ClampU(newUs, _minIntegrationUs, _maxIntegrationUs);
-                                        nudIntegrationTimeUs.Value = (decimal)clamped;
-                                    }
-                                    finally
-                                    {
-                                        _suppressNudValueChanged = false;
-                                    }
+                                    try { nudIntegrationTimeUs.Value = (decimal)_integrationTimeUs; }
+                                    finally { _suppressNudValueChanged = false; }
                                 }));
                             }
                         }
                     }
 
-                    // UI 更新頻率限制（避免 BeginInvoke 排隊）
                     long nowMs = sw.ElapsedMilliseconds;
                     if (nowMs - lastUiUpdateMs >= UI_UPDATE_MIN_INTERVAL_MS)
                     {
-                        lastUiUpdateMs = nowMs;
+                        // 複製一份給 UI，避免 UI 繪圖時與下一輪覆寫衝突
+                        float[] intensitiesCopy = new float[_intensities.Length];
+                        Array.Copy(_intensities, intensitiesCopy, _intensities.Length);
 
-                        float[] intensityCopy = new float[_intensities.Length];
-                        Array.Copy(_intensities, intensityCopy, _intensities.Length);
+                        uint showUs = _integrationTimeUs;
 
                         BeginInvoke(new Action(() =>
                         {
-                            UpdateSpectrumDisplay(intensityCopy, rawMax, rawMaxWl);
+                            // 更新圖
+                            UpdateSpectrumDisplay(intensitiesCopy, rawMax, rawMaxWl);
+
+                            // 更新數值顯示
+                            labelCurrentIntegrationValue.Text = showUs.ToString() + " µs";
                         }));
+
+                        lastUiUpdateMs = nowMs;
                     }
 
-                    // 控制抓取節奏，避免過快導致裝置狀態機逾時
-                    int desiredPeriodMs = (int)Math.Max(10, (usedIntegrationUs / 1000) + 5);
-                    int elapsedThisLoopMs = (int)(sw.ElapsedMilliseconds - loopStartMs);
-                    int sleepMs = desiredPeriodMs - elapsedThisLoopMs;
+                    // 節奏控制：避免把 SDK 打爆（尤其是很短積分時間時）
+                    // 目標：一輪時間 >= integration + 5ms（最少也留 2ms 空檔）
+                    long elapsedThisLoop = sw.ElapsedMilliseconds - loopStartMs;
+                    int targetMs = (int)(usedIntegrationUs / 1000u) + 5;
+                    if (targetMs < 2) targetMs = 2;
+
+                    int sleepMs = targetMs - (int)elapsedThisLoop;
                     if (sleepMs > 0)
                         Thread.Sleep(sleepMs);
+                    else
+                        Thread.Sleep(1);
                 }
+            }
+            catch (Exception ex)
+            {
+                BeginInvoke(new Action(() =>
+                {
+                    MessageBox.Show("擷取執行緒例外：\n" + ex.Message, "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }));
             }
             finally
             {
                 BeginInvoke(new Action(() =>
                 {
+                    btnStart.Enabled = (_deviceHandle != IntPtr.Zero);
                     btnStop.Enabled = false;
-                    btnStart.Enabled = (_deviceHandle != IntPtr.Zero) && !releasedOnError;
                 }));
-                _isCapturing = false;
             }
         }
 
@@ -303,15 +364,29 @@ namespace Raman1._0
             {
                 try
                 {
+                    bool ended = true;
+
                     if (waitForCurrentAcquire)
                     {
                         uint us = ClampU(_integrationTimeUs, _minIntegrationUs, _maxIntegrationUs);
                         int waitMs = (int)Math.Min(15000, (us / 1000) + 2000);
-                        _captureThread.Join(waitMs);
+                        ended = _captureThread.Join(waitMs);
                     }
                     else
                     {
-                        _captureThread.Join(200);
+                        ended = _captureThread.Join(200);
+                    }
+
+                    // 若執行緒還卡著（多半是 SDK/USB 內部阻塞），嘗試關閉 handle 來中斷
+                    if (!ended)
+                    {
+                        if (_deviceHandle != IntPtr.Zero)
+                        {
+                            try { SpectrometerInterface.Close(_deviceHandle); } catch { }
+                            _deviceHandle = IntPtr.Zero;
+                        }
+
+                        _captureThread.Join(2000);
                     }
                 }
                 catch { }
@@ -320,6 +395,10 @@ namespace Raman1._0
             btnStart.Enabled = (_deviceHandle != IntPtr.Zero);
             btnStop.Enabled = false;
         }
+
+        #endregion
+
+        #region 自動積分計算（沿用你現有策略）
 
         private uint ComputeAutoIntegrationUs(uint currentUs, float rawMax)
         {
@@ -341,6 +420,7 @@ namespace Raman1._0
             }
 
             uint newUs = (uint)Math.Round(currentUs * ratio);
+
             newUs = ClampU(newUs, _minIntegrationUs, _maxIntegrationUs);
 
             uint softMax = Math.Min(_maxIntegrationUs, AUTO_SOFT_MAX_US);
@@ -370,35 +450,20 @@ namespace Raman1._0
 
         #endregion
 
-        #region 暗背景（沿用目前流程）
+        #region 暗背景（沿用你目前可用的流程）
 
         private void btnSaveDarkBackground_Click(object sender, EventArgs e)
         {
-            if (_deviceHandle == IntPtr.Zero)
+            if (_deviceHandle == IntPtr.Zero || _intensities == null || _intensities.Length == 0)
             {
-                MessageBox.Show("請先執行初始化。");
-                return;
-            }
-            if (_isCapturing)
-            {
-                MessageBox.Show("請先停止擷取再儲存暗背景。");
+                MessageBox.Show("請先初始化並開始擷取，才能儲存暗背景。");
                 return;
             }
 
-            uint usedIntegrationUs = ClampU(_integrationTimeUs, _minIntegrationUs, _maxIntegrationUs);
-
-            float[] darkData = new float[SpectrometerInterface.FrameSize];
-            string error;
-            bool ok = SpectrometerInterface.AcquireSpectrum(
-                _deviceHandle, usedIntegrationUs, _averageCount,
-                darkData, out _, out _, out error);
-
-            if (!ok)
-            {
-                MessageBox.Show("擷取暗背景失敗：\n" + error, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            // 這裡直接取「目前畫面顯示前的最新 raw intensities」較合理
+            // 注意：UpdateSpectrumDisplay 已改成不會修改原始資料（避免扣背景後污染 raw）
+            float[] darkData = new float[_intensities.Length];
+            Array.Copy(_intensities, darkData, _intensities.Length);
 
             string setErr;
             if (!SpectrometerInterface.SetDarkBackground(darkData, out setErr))
@@ -432,7 +497,7 @@ namespace Raman1._0
 
         #endregion
 
-        #region 繪圖（含 X/Y 軸刻度與單位）
+        #region 繪圖（含 X/Y 軸刻度與單位；不再污染 raw intensities）
 
         private void UpdateSpectrumDisplay(float[] intensities, float maxIntensity, float maxWavelength)
         {
@@ -441,8 +506,8 @@ namespace Raman1._0
 
             int width = pictureSpectrum.Width;
             int height = pictureSpectrum.Height;
-            Bitmap bmp = new Bitmap(width, height);
 
+            Bitmap bmp = new Bitmap(width, height);
             using (Graphics g = Graphics.FromImage(bmp))
             {
                 g.Clear(Color.Black);
@@ -450,7 +515,11 @@ namespace Raman1._0
                 if (intensities != null && intensities.Length > 1)
                 {
                     int n = intensities.Length;
-                    int left = 60, right = 15, top = 15, bottom = 40;
+
+                    int left = 60;
+                    int right = 15;
+                    int top = 15;
+                    int bottom = 40;
 
                     bool doDarkSubtract =
                         (chkSubtractBackground != null && chkSubtractBackground.Checked) &&
@@ -460,35 +529,52 @@ namespace Raman1._0
                     float localMax = float.MinValue;
                     int maxIndex = 0;
 
+                    // 先找最大值（用於自動縮放與顯示）
                     if (doDarkSubtract)
                     {
                         for (int i = 0; i < n; i++)
                         {
                             float v = intensities[i] - SpectrometerInterface.DarkBackground[i];
                             if (v < 0) v = 0;
-                            intensities[i] = v;
+
                             if (v > localMax)
                             {
                                 localMax = v;
                                 maxIndex = i;
                             }
                         }
-
                         if (localMax < 0) localMax = 0;
                         maxIntensity = localMax;
 
                         if (SpectrometerInterface.Wavelengths != null &&
                             SpectrometerInterface.Wavelengths.Length > maxIndex)
-                        {
                             maxWavelength = SpectrometerInterface.Wavelengths[maxIndex];
-                        }
                         else
-                        {
                             maxWavelength = 0f;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < n; i++)
+                        {
+                            float v = intensities[i];
+                            if (v > localMax)
+                            {
+                                localMax = v;
+                                maxIndex = i;
+                            }
                         }
+                        if (localMax < 0) localMax = 0;
+                        maxIntensity = localMax;
+
+                        if (SpectrometerInterface.Wavelengths != null &&
+                            SpectrometerInterface.Wavelengths.Length > maxIndex)
+                            maxWavelength = SpectrometerInterface.Wavelengths[maxIndex];
+                        else
+                            maxWavelength = 0f;
                     }
 
                     float globalMax = (maxIntensity > 0) ? maxIntensity : 1f;
+
                     float plotWidth = (width - left - right);
                     float plotHeight = (height - top - bottom);
                     if (plotWidth <= 1 || plotHeight <= 1) return;
@@ -498,12 +584,21 @@ namespace Raman1._0
 
                     PointF prev = PointF.Empty;
                     bool hasPrev = false;
+
                     using (Pen pen = new Pen(Color.Lime, 1f))
                     {
                         for (int i = 0; i < n; i++)
                         {
+                            float v = intensities[i];
+                            if (doDarkSubtract)
+                            {
+                                v = v - SpectrometerInterface.DarkBackground[i];
+                                if (v < 0) v = 0;
+                            }
+
                             float x = left + i * xScale;
-                            float y = top + (plotHeight - intensities[i] * yScale);
+                            float y = top + (plotHeight - v * yScale);
+
                             if (y < top) y = top;
                             if (y > top + plotHeight) y = top + plotHeight;
 
@@ -527,6 +622,7 @@ namespace Raman1._0
                         float wlMin = 0, wlMid = 0, wlMax = 0;
                         bool hasWL = SpectrometerInterface.Wavelengths != null &&
                                      SpectrometerInterface.Wavelengths.Length == n;
+
                         if (hasWL)
                         {
                             wlMin = SpectrometerInterface.Wavelengths[0];
@@ -545,35 +641,45 @@ namespace Raman1._0
 
                         if (hasWL)
                         {
-                            g.DrawString($"{wlMin:F0} nm", f, br, x0 - 10, yAxis + 8);
-                            g.DrawString($"{wlMid:F0} nm", f, br, x1 - 12, yAxis + 8);
-                            g.DrawString($"{wlMax:F0} nm", f, br, x2 - 20, yAxis + 8);
+                            g.DrawString(wlMin.ToString("F0"), f, br, x0 - 10, yAxis + 8);
+                            g.DrawString(wlMid.ToString("F0"), f, br, x1 - 10, yAxis + 8);
+                            g.DrawString(wlMax.ToString("F0"), f, br, x2 - 10, yAxis + 8);
                         }
-                    }
 
-                    using (Font f = new Font("Arial", 9))
-                    using (Brush br = new SolidBrush(Color.White))
-                    using (Pen tickPen = new Pen(Color.White, 1f))
-                    {
-                        // Y 軸刻度
-                        for (int i = 0; i <= 5; i++)
-                        {
-                            float y = top + plotHeight - i * (plotHeight / 5);
-                            g.DrawLine(tickPen, left - 5, y, left, y);
-                            float value = globalMax * i / 5f;
-                            g.DrawString($"{value:F0}", f, br, left - 55, y - 8);
-                        }
-                        // 標記最大值位置
-                        if (maxWavelength > 0)
-                        {
-                            g.DrawString($"Peak λ: {maxWavelength:F1} nm", f, br, left + 5, top - 15);
-                            g.DrawString($"Intensity: {maxIntensity:F0}", f, br, left + 5, top - 30);
-                        }
+                        float y0 = top + plotHeight;
+                        float y1 = top + plotHeight * 0.5f;
+                        float y2 = top;
+
+                        g.DrawLine(tickPen, left - 5, y0, left, y0);
+                        g.DrawLine(tickPen, left - 5, y1, left, y1);
+                        g.DrawLine(tickPen, left - 5, y2, left, y2);
+
+                        g.DrawString("0", f, br, 5, y0 - 8);
+                        g.DrawString((globalMax * 0.5f).ToString("F0"), f, br, 5, y1 - 8);
+                        g.DrawString(globalMax.ToString("F0"), f, br, 5, y2 - 8);
+
+                        string xLabel = "波長 (nm)";
+                        SizeF xSize = g.MeasureString(xLabel, f);
+                        g.DrawString(xLabel, f, br, left + plotWidth / 2f - xSize.Width / 2f, height - 20);
+
+                        string yLabel = "強度 (a.u.)";
+                        var state = g.Save();
+                        g.TranslateTransform(18f, top + plotHeight / 2f);
+                        g.RotateTransform(-90f);
+                        SizeF ySize = g.MeasureString(yLabel, f);
+                        g.DrawString(yLabel, f, br, -ySize.Width / 2f, -ySize.Height / 2f);
+                        g.Restore(state);
                     }
                 }
             }
 
+            if (pictureSpectrum.Image != null)
+                pictureSpectrum.Image.Dispose();
+
             pictureSpectrum.Image = bmp;
+
+            labelMaxIntensityValue.Text = maxIntensity.ToString("F0");
+            labelMaxWavelengthValue.Text = maxWavelength.ToString("F1") + " nm";
         }
 
         #endregion
